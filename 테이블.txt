@@ -1,0 +1,44 @@
+[ 일반회원 ]
+
+encUsrNm	이름
+usrId		아이디
+encUsrPw		비번
+birthday		생년
+sexCd		성별
+encEmail		이메일
+encHZipcode	지역번호
+encHAddress1	주소1
+encHAddress2	주소2
+encHAddress3	주소3
+doroPost		도로명 지역번호
+doroAddr1	도로명 주소1
+doroAddr2	도로명 주소2
+doroAddr3	도로명 주소3
+doroAddr4	도로명 주소4
+doroAddrYn	도로명 주소 사용여부
+encPhoneNo	전화번호
+encMobileNo	휴대폰
+option1		소속
+option2		소속기관명
+option3		대표자 성명
+option4		설립년도
+
+
+[ 기관회원 ]
+encUsrNm	이름
+usrId		아이디
+encUsrPw		비번
+birthday		생년
+sexCd		성별
+encEmail		이메일
+encHZipcode	지역번호
+encHAddress1	주소1
+encHAddress2	주소2
+encHAddress3	주소3
+doroPost		도로명 지역번호
+doroAddr1	도로명 주소1
+doroAddr2	도로명 주소2
+doroAddr3	도로명 주소3
+doroAddr4	도로명 주소4
+doroAddrYn	도로명 주소 사용여부
+/시도/시군
