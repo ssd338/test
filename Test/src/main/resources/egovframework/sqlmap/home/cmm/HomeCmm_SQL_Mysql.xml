@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<sqlMap namespace="Cmm">
+	<typeAlias  alias="egovMap" type="egovframework.rte.psl.dataaccess.util.EgovMap"/>
+	
+	<select id="cmmDAO.nextNo" parameterClass="java.util.HashMap" resultClass="int">
+		SELECT ifnull(MAX(${cm})+1,1)
+		FROM ${table}
+	</select>
+</sqlMap>
