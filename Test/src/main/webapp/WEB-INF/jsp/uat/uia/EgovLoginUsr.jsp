@@ -43,7 +43,7 @@ function actionLogin() {
 
 function goRegiUsr() {
     var userSe = document.loginForm.userSe.value;
-    document.loginForm.action="<c:url value='/home/join/JoinTypeView.do'/>";
+    document.loginForm.action="<c:url value='/home/join/JoinView.do'/>";
     document.loginForm.submit();
   
 }

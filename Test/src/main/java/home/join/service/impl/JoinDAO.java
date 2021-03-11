@@ -6,6 +6,7 @@ import egovframework.let.uss.umt.service.MberManageVO;
 import egovframework.let.uss.umt.service.UserDefaultVO;
 
 import egovframework.rte.psl.dataaccess.EgovAbstractDAO;
+import home.join.service.JoinVO;
 
 import org.springframework.stereotype.Repository;
 
@@ -17,7 +18,12 @@ public class JoinDAO extends EgovAbstractDAO{
    public int checkIdDplct(String checkId){
         return (Integer)select("joinDao.checkUserId", checkId);
     }
-	
+   
+   /* 회원가입 */
+	public String insertMber(JoinVO joinVO) {
+		return (String)insert("joinDAO.insertMber", joinVO);
+	}
+		
 	
 
 }

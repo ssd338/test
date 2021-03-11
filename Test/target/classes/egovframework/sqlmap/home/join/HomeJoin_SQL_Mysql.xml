@@ -6,34 +6,33 @@
 	<typeAlias  alias="JoinVO" type="home.join.service.JoinVO"/>
 	
 	<resultMap id="joinUser" class="home.join.service.JoinVO">
-		<result property="encUsrNm" column="usr_no"/>
+		<result property="usrNo" column="usr_no"/>
 		<result property="usrId" column="usr_id"/>
 		<result property="encUsrPw" column="enc_usr_pw"/>
 		<result property="birthday" column="birthday"/>
 		<result property="sexCd" column="sex_cd"/>
+		<result property="encUsrNm" column="enc_usr_nm"/>
 		<result property="encEmail" column="enc_email"/>
-		<result property="encMobileNo" column=""/>
-		<result property="encPhoneNo" column=""/>
+		<result property="encMobileNo" column="enc_mobile_no"/>
+		<result property="encPhoneNo" column="enc_phone_no"/>
 		<result property="encHZipcode" column="enc_h_zipcode"/>
 		<result property="encHAddress1" column="enc_h_address1"/>
 		<result property="encHAddress2" column="enc_h_address2"/>
-		<result property="encHAddress3" column="enc_h_address3"/>
 		<result property="doroPost" column="doro_post"/>
 		<result property="doroAddr1" column="doro_addr1"/>
 		<result property="doroAddr2" column="doro_addr2"/>
-		<result property="doroAddr3" column="doro_addr3"/>
-		<result property="doroAddr4" column="doro_addr4"/>
 		<result property="doroAddrYn" column="doro_addr_yn"/>
 		<result property="option1" column="option1"/>
 		<result property="option2" column="option2"/>
 		<result property="option3" column="option3"/>
 		<result property="option4" column="option4"/>
-		<result property="option5" column="option5"/>
 		<result property="crtDt" column="crt_dt"/>
 		<result property="udtDt" column="udt_dt"/>
 		<result property="ESNTLID" column="ESNTL_ID"/>
-		<result property="LASTLOGINPNTTM" column="LAST_LOGIN_PNTTM"/>
+		<!-- <result property="LASTLOGINPNTTM" column="LAST_LOGIN_PNTTM"/>
 		<result property="LOGINTRYCNT" column="LOGIN_TRY_CNT"/>
+		<result property="CRTFCNO" column="CRTFC_NO"/> -->
+		
 	</resultMap>
 	
 	<select id="joinDao.checkUserId" resultClass="int">
@@ -43,5 +42,89 @@
 			WHERE usr_id = #usrId#
 		]]>
 	</select>
-	
+	<insert id="joinDAO.insertMber" parameterClass="JoinVO">
+            INSERT INTO tbl_usrm 
+                (   
+                    usr_no         	 
+                    , usr_id         	 
+                    , enc_usr_pw       
+                    , birthday         
+                    , sex_cd   		 
+                    , enc_usr_nm		 
+                    , enc_email  		 
+                    , enc_mobile_no    
+                    , enc_phone_no     
+                    , enc_h_zipcode    
+                    <isNotEmpty property="encHAddress1">
+                    , enc_h_address1  
+                    </isNotEmpty>
+                    <isNotEmpty property="encHAddress2">
+                    , enc_h_address2   
+                    </isNotEmpty>
+                    , doro_post 
+                    <isNotEmpty property="doroAddr1">
+                    , doro_addr1   
+                    </isNotEmpty>	
+                    <isNotEmpty property="doroAddr2">
+                    , doro_addr2   
+                    </isNotEmpty>	
+                    , doro_addr_yn 
+                    <isNotEmpty property="option1">
+                    , option1      	 
+                    </isNotEmpty>
+                    <isNotEmpty property="option2">
+                    , option2      	 
+                    </isNotEmpty>	
+                    <isNotEmpty property="option3">
+                    , option3     	 
+                    </isNotEmpty>	
+                    <isNotEmpty property="option4">
+                    , option4    	 
+                    </isNotEmpty>		
+                    , crt_dt    		 
+                    , udt_dt			 
+                    , ESNTL_ID		
+                      )
+              VALUES(
+                    #usrNo#
+                    , #usrId#
+                    , #encUsrPw#
+                    , #birthday#
+                    , #sexCd#
+                    , #encUsrNm#
+                    , #encEmail#
+                    , #encMobileNo#
+                    , #encPhoneNo#
+                    , #encHZipcode#
+                    <isNotEmpty property="encHAddress1">
+                    , #encHAddress1# 
+                    </isNotEmpty>	  
+                    <isNotEmpty property="encHAddress2">
+                    , #encHAddress2#
+                    </isNotEmpty>		
+                    , #doroPost#
+                    <isNotEmpty property="doroAddr1">
+                    , #doroAddr1# 
+                    </isNotEmpty>	
+                   <isNotEmpty property="doroAddr2">
+                    , #doroAddr2# 
+                    </isNotEmpty>		
+                    , #doroAddrYn#
+                   <isNotEmpty property="option1">
+                    , #option1#  	 
+                    </isNotEmpty>	 
+                   <isNotEmpty property="option2">
+                    , #option2#  	 
+                    </isNotEmpty>	
+                   <isNotEmpty property="option3">
+                    , #option3#  	 
+                    </isNotEmpty>	
+                   <isNotEmpty property="option4">
+                    , #option4#  	 
+                    </isNotEmpty>		
+                    , NOW()
+                    , NOW()
+                    , #ESNTLID#
+                    )              
+    </insert>
 </sqlMap>

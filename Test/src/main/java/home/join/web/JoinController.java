@@ -65,17 +65,18 @@ public class JoinController {
 	@Autowired
 	private DefaultBeanValidator beanValidator;
 
+	
 	/* 회원가입 분기 - 일반, 기업 */
-	@@RequestMapping("/home/join/JoinTypeView.do")
-	public String joinTypeView() {
-		return "home/join/JoinType";
+	@RequestMapping("/home/join/JoinView.do")
+	public String join() {
+		return "home/join/Join";
 	}
 			
 	
 	
 	/* 일반 회원 가입 */
-	@RequestMapping("/home/join/JoinView.do")
-	public String joinView( 
+	@RequestMapping("/home/join/JoinMberRegistView.do")
+	public String JoinMberRegistView( 
 			@ModelAttribute("joinVO") JoinVO joinVO
 			, @RequestParam Map<String, Object> commandMap
 			, Model model
@@ -94,15 +95,19 @@ public class JoinController {
 //		}
 
 
-		return "home/join/Join";
+		return "home/join/JoinMberRegist";
 	}
 	
 	
 	/** 회원가입  */
-	@RequestMapping("/home/join/Join.do")
-	public String join(
+	@RequestMapping("/home/join/JoinMberRegist.do")
+	public String JoinMberRegist(
 			@ModelAttribute("joinVO") JoinVO joinVO
+			, BindingResult bindingResult
 			) throws Exception {
+/*		beanValidator.validate(joinVO, bindingResult);*/
+		
+		joinService.insertMber(joinVO);
 		return "forward:/uat/uia/egovLoginUsr.do";
 	}
 	
@@ -137,6 +142,17 @@ public class JoinController {
 		model.addAttribute("checkId", checkId);	
 		return "home/join/JoinCheckId";
 	}
+	
+
+	@RequestMapping("/home/join/JoinMberFinal.do")
+	public String JoinMberFinalView()
+			throws Exception{
+		return "home/join/JoinMberFinal";
+	}
+	
+	
+	
+	
 	
 	/**
 	 * 일반회원목록을 조회한다. (pageing)
