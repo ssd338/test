@@ -6,6 +6,7 @@ import egovframework.let.utl.fcc.service.EgovStringUtil;
 import egovframework.let.utl.sim.service.EgovFileScrty;
 
 import egovframework.rte.fdl.cmmn.EgovAbstractServiceImpl;
+import home.join.service.JoinVO;
 
 import javax.annotation.Resource;
 
@@ -41,23 +42,22 @@ public class EgovLoginServiceImpl extends EgovAbstractServiceImpl implements
 	 * @exception Exception
 	 */
     @Override
-	public LoginVO actionLogin(LoginVO vo) throws Exception {
-
+	public JoinVO actionLogin(JoinVO vo) throws Exception {
     	// 1. 입력한 비밀번호를 암호화한다.
-    	String enpassword = EgovFileScrty.encryptPassword(vo.getPassword(), vo.getId());
-    	vo.setPassword(enpassword);
+    	String enpassword = EgovFileScrty.encryptPassword(vo.getEncUsrPw(), vo.getUsrId());
+    	vo.setEncUsrPw(enpassword);
 
     	// 2. 아이디와 암호화된 비밀번호가 DB와 일치하는지 확인한다.
-    	LoginVO loginVO = loginDAO.actionLogin(vo);
 
+    	JoinVO joinVO = loginDAO.actionLogin(vo);
     	// 3. 결과를 리턴한다.
-    	if (loginVO != null && !loginVO.getId().equals("") && !loginVO.getPassword().equals("")) {
-    		return loginVO;
+    	if (joinVO != null && !joinVO.getUsrId().equals("") && !joinVO.getEncUsrPw().equals("")) {
+    		return joinVO;
     	} else {
-    		loginVO = new LoginVO();
+    		joinVO = new JoinVO();
     	}
 
-    	return loginVO;
+    	return joinVO;
     }
 
     /**

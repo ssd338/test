@@ -2,6 +2,7 @@ package egovframework.let.uat.uia.service.impl;
 import egovframework.com.cmm.LoginVO;
 
 import egovframework.rte.psl.dataaccess.EgovAbstractDAO;
+import home.join.service.JoinVO;
 
 import org.springframework.stereotype.Repository;
 /**
@@ -30,8 +31,9 @@ public class LoginDAO extends EgovAbstractDAO {
 	 * @return LoginVO
 	 * @exception Exception
 	 */
-    public LoginVO actionLogin(LoginVO vo) throws Exception {
-    	return (LoginVO)select("loginDAO.actionLogin", vo);
+    public JoinVO actionLogin(JoinVO vo) throws Exception {
+
+    	return (JoinVO)select("loginDAO.actionLogin", vo);
     }
 
     /**

@@ -1,6 +1,7 @@
 package egovframework.let.uat.uia.service;
 
 import egovframework.com.cmm.LoginVO;
+import home.join.service.JoinVO;
 /**
  * 일반 로그인을 처리하는 비즈니스 인터페이스 클래스
  * @author 공통서비스 개발팀 박지욱
@@ -27,7 +28,7 @@ public interface EgovLoginService {
 	 * @param vo    LoginVO
 	 * @exception Exception Exception
 	 */
-	public LoginVO actionLogin(LoginVO vo)
+	public JoinVO actionLogin(JoinVO vo)
 	  throws Exception;
 
 	/**

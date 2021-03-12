@@ -26,7 +26,6 @@
 		padding: 2px 5px 2px 5px;
 		border-radius: 2px;
 	}
-
 </style>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" >
 <meta http-equiv="content-language" content="ko">
@@ -37,21 +36,18 @@
 <script type="text/javascript" src="<c:url value='/js/EgovZipPopup.js' />" ></script>
 <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 <script>
-
+/* 우편 */
 function closeDaumPostcode() {
 	var element_layer = document.getElementById('layer');
-    // iframe을 넣은 element를 안보이게 한다.
-    element_layer.style.display = 'none';
+    element_layer.style.display = 'none';	 				 // iframe을 넣은 element를 안보이게 한다.
 }
-
 function getPost() {
 	var element_layer = document.getElementById('layer');
     new daum.Postcode({
         oncomplete: function(data) {
-            // 각 주소의 노출 규칙에 따라 주소를 조합한다.
+            
             var addr = ''; // 주소 변수
-
-            //사용자가 선택한 주소 타입에 따라 해당 주소 값을 가져온다.
+          
             if (data.userSelectedType === 'R') { // 사용자가 도로명 주소를 선택했을 경우
                 addr = data.roadAddress;
                 document.getElementById("doroAddrYn").value = "Y"					// 도로인지 구주소인지
@@ -60,7 +56,7 @@ function getPost() {
                 document.getElementById("doroAddrYn").value = "N"
             }
             
-           
+            data.zonecode = data.zonecode.replace(/,/g,"")	
             document.getElementById("encHZipcode").value = data.zonecode;			//우편번호 넣어줌
             document.getElementById("doroPost").value = data.zonecode;			//우편번호 넣어줌
             document.getElementById("Address1").value = addr;						// 주소 넣어줌
@@ -75,19 +71,15 @@ function getPost() {
         height : '100%',
         maxSuggestItems : 5
     }).embed(element_layer);
-
     // iframe을 넣은 element를 보이게 한다.
     element_layer.style.display = 'block';
-
     initLayerPosition();
 }
-
     function initLayerPosition(){
     	var element_layer = document.getElementById('layer');
         var width = 300; //우편번호서비스가 들어갈 element의 width
         var height = 400; //우편번호서비스가 들어갈 element의 height
         var borderWidth = 5; //샘플에서 사용하는 border의 두께
-
         // 위에서 선언한 값들을 실제 element에 넣는다.
         element_layer.style.width = width + 'px';
         element_layer.style.height = height + 'px';
@@ -96,7 +88,9 @@ function getPost() {
         element_layer.style.left = (((window.innerWidth || document.documentElement.clientWidth) - width)/2 - borderWidth) + 'px';
         element_layer.style.top = (((window.innerHeight || document.documentElement.clientHeight) - height)/2 - borderWidth) + 'px';
    }
+/* 우편끝 */
 
+/* 아이디 중복체크 */
 function fnIdCheck(){
     var retVal;
     var url = "<c:url value='/home/join/JoinCheckIdView.do'/>";
@@ -110,13 +104,13 @@ function fnIdCheck(){
         document.joinVO.id_view.value = retVal;
     }
 }
-
 function showModalDialogCallback(retVal) {
 	if(retVal) {
         document.joinVO.usrId.value = retVal;
         document.joinVO.id_view.value = retVal;
     }
 }
+/* 아이디 중복체크 끝 */
 
 /* 가입버튼  */
 function fnSbscrb(){
@@ -128,51 +122,45 @@ function fnSbscrb(){
 	}
 }
 
-
-
 function validation(){
+	/* 입력값의 불필요한 공백이과 기호를 제거한후 다시 넣어준다 */
+	var arr = ['encUsrNm','encEmail','tel1','tel2','tel3','Mtel1','Mtel2','Mtel3','Address2','birthdayD','optionD'];
+	var stringRegx = /[~!@#$%^&*()_+|<>?:{}]/; 
+	var regex= /^[0-9]/g;
 	
-	/* 입력값의 공백을 제거 */
-	var encUsrNm = document.getElementById("encUsrNm").value.replace(/ /g,"")			// 이름
-	var areaNo= document.getElementById("areaNo").value									// 전화번호
-	var middleTelno = document.getElementById("middleTelno").value.replace(/ /g,"")		// 전화번호
-	var endTelno =document.getElementById("endTelno").value.replace(/ /g,"")			// 전화번호
-	var Mtel1 = document.getElementById("Mtel1").value	
-	var Mtel2 = document.getElementById("Mtel2").value.replace(/ /g,"")
-	var Mtel3 = document.getElementById("Mtel3").value.replace(/ /g,"")
-	var Address2 = document.getElementById("Address2").value.replace(/ /g,"")
-	
-	var birthday = document.getElementById("birthday").value.replace(/,/g,"")
-	birthday = birthday.replace(/-/g,"")
-
-	var option4 = document.getElementById("option4").value.replace(/,/g,"")
-	option4 = option4.replace(/-/g,"")
-	
-	/* 공백을 제거한 값을 다시 폼에 넣어준다 */
- 	document.getElementById("encUsrNm").value = encUsrNm
- 	alert(encUsrNm)
-	document.getElementById("areaNo").value = encUsrNm
-	document.getElementById("middleTelno").value = middleTelno
-	document.getElementById("endTelno").value = endTelno
-	document.getElementById("Mtel1").value = Mtel1
-	document.getElementById("Mtel2").value = Mtel2
-	document.getElementById("Mtel3").value = Mtel3 
-	document.getElementById("birthday").value = birthday 
-	document.getElementById("option4").value = option4 
+	for(var i=0; i<arr.length; i++){
+		document.getElementById(arr[i]).value = document.getElementById(arr[i]).value.replace(/ /g,"")
+		document.getElementById(arr[i]).value = document.getElementById(arr[i]).value.replace(/,/g,"")
+	}
 	
 	
 	/* 나눠져있는 값을 합친다 */
-	document.getElementById("encPhoneNo").value = areaNo + middleTelno + endTelno
+	var encUsrNm = document.getElementById("encUsrNm").value
+	var tel1 = document.getElementById("tel1").value
+	var tel2 = document.getElementById("tel2").value
+	var tel3 = document.getElementById("tel3").value
+	var Mtel1 = document.getElementById("Mtel1").value
+	var Mtel2 = document.getElementById("Mtel2").value
+	var Mtel3 = document.getElementById("Mtel3").value
+	var Address2 = document.getElementById("Address2").value
+	
+	document.getElementById("encPhoneNo").value = tel1 + tel2 + tel3
 	document.getElementById("encMobileNo").value = Mtel1 + Mtel2 + Mtel3
 	document.getElementById("doroAddr2").value = Address2
 	document.getElementById("encHAddress2").value = Address2
-
+	document.getElementById("option4").value = document.getElementById("optionD").value
+	document.getElementById("birthday").value = document.getElementById("birthdayD").value
+	
 	if(encUsrNm == null || encUsrNm == ""){
 		alert("이름을 입력하세요")
 		return false;
 	}
-	if(middleTelno == null || middleTelno == "" || endTelno == null || endTelno == "" ){
+	if(tel1 == null || tel1 == "" || tel2 == null || tel2 == "" || tel3 == null || tel3 == "" ){
 		alert("전화번호를 입력해주세요.");
+		return false;
+	}
+	if(Mtel1 == null || Mtel1 == "" ||Mtel2 == null || Mtel2 == "" || Mtel3 == null || Mtel3 == "" ){
+		alert("핸드폰 번호를 입력해주세요.");
 		return false;
 	}
 	if(document.joinVO.encUsrPw.value != document.joinVO.password2.value){
@@ -182,9 +170,6 @@ function validation(){
 	
 	return true;
 }
-
-
-
 </script>
 </head>
 <body>
@@ -251,7 +236,8 @@ function validation(){
 			                <td class="td_width">생년월일
 			                </td>
 			                <td class="td_content">
-			                    <input id="birthday" type="date" name="birthday" Class="txaIpt" size="5" maxlength="5"  />         
+			                    <input id="birthdayD" type="date" Class="txaIpt" size="5" maxlength="5" />         
+			                    <form:input path="birthday" id="birthday" type="hidden" name="birthday" Class="txaIpt" size="5" maxlength="5"  />         
 			                </td>
 			            </tr>
 			            <tr>
@@ -303,7 +289,7 @@ function validation(){
 			                </td>
 			                <td class="td_content">
 			                	<input type="hidden" name="encPhoneNo" id="encPhoneNo">
-			                	<select name="areaNo" class="txaIpt" id="areaNo">
+			                	<select name="tel1" class="txaIpt" id="tel1">
 			                		<option value="" selected>선택</option>
 			                		<option value="02" >02</option>
 			                		<option value="031" >031</option>
@@ -319,8 +305,8 @@ function validation(){
 			                		<option value="062" >062</option>
 			                		<option value="063" >063</option>
 			                	</select>
-			                    - <input id="middleTelno" name="middleTelno" Class="txaIpt" size="5" maxlength="5" />
-			                    - <input id="endTelno" name="endTelno" Class="txaIpt" size="5" maxlength="5" />
+			                    - <input id="tel2" name="tel2" Class="txaIpt" size="5" maxlength="5" />
+			                    - <input id="tel3" name="tel3" Class="txaIpt" size="5" maxlength="5" />
 			                   
 			                </td>
 			            </tr>
@@ -372,7 +358,8 @@ function validation(){
 			                <td class="td_width">설립년도
 			                </td>
 			                <td class="td_content">
-			                    <input id="option4" type="date" name="option4" Class="txaIpt" size="5" maxlength="5"  />         
+			                    <input id="optionD" type="date" name="optionD" Class="txaIpt" size="5" maxlength="5"  /> 
+			                    <form:input path="option4" id="option4" name="option4" type="hidden"  />           
 			                </td>
 			            </tr>
 			        </table>

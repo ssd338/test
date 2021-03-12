@@ -5,12 +5,10 @@ import java.util.Map;
 import egovframework.com.cmm.ComDefaultCodeVO;
 import egovframework.com.cmm.EgovMessageSource;
 import egovframework.com.cmm.service.EgovCmmUseService;
-import egovframework.let.uss.umt.service.UserDefaultVO;
-import egovframework.let.utl.sim.service.EgovFileScrty;
+
 
 import egovframework.rte.fdl.property.EgovPropertyService;
-import egovframework.rte.fdl.security.userdetails.util.EgovUserDetailsHelper;
-import egovframework.rte.ptl.mvc.tags.ui.pagination.PaginationInfo;
+
 import home.join.service.JoinService;
 import home.join.service.JoinVO;
 
@@ -108,6 +106,7 @@ public class JoinController {
 /*		beanValidator.validate(joinVO, bindingResult);*/
 		
 		joinService.insertMber(joinVO);
+		
 		return "forward:/uat/uia/egovLoginUsr.do";
 	}
 	

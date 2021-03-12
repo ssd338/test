@@ -21,14 +21,15 @@
 		
         dataSource="egov.dataSource"
         			
-        jdbcUsersByUsernameQuery="SELECT USER_ID, ESNTL_ID AS PASSWORD, 1 ENABLED, USER_NM, USER_ZIP, 
-        							USER_ADRES, USER_EMAIL, USER_SE,  '-' ORGNZT_ID, ESNTL_ID, 
-        							'-' ORGNZT_NM FROM COMVNUSERMASTER WHERE CONCAT(USER_SE, USER_ID) = ?"
+        jdbcUsersByUsernameQuery="SELECT usr_no, usr_id, enc_usr_pw, birthday, sex_cd, enc_usr_nm, enc_email, enc_mobile_no,
+        						 enc_phone_no, enc_h_zipcode, enc_h_address1, enc_h_address2, doro_post, doro_addr1
+        						 , doro_addr2, doro_addr_yn, option1, option2, option3, option4, crt_dt, udt_dt, ESNTL_ID
+       							 FROM tbl_usrm WHERE usr_id = ?"
         
         jdbcAuthoritiesByUsernameQuery="SELECT A.SCRTY_DTRMN_TRGET_ID USER_ID, A.AUTHOR_CODE AUTHORITY 
-        							FROM LETTNEMPLYRSCRTYESTBS A, COMVNUSERMASTER B 
+        							FROM LETTNEMPLYRSCRTYESTBS A, tbl_usrm B 
         							WHERE A.SCRTY_DTRMN_TRGET_ID = B.ESNTL_ID AND B.USER_ID = ?"
-        							
+        									
         jdbcMapClass="egovframework.let.uat.uia.service.impl.EgovSessionMapping"
 
         requestMatcherType="regex"
@@ -37,9 +38,9 @@
         hashBase64="false"
 		
 		concurrentMaxSessons="1"
-		concurrentExpiredUrl="/uat/uia/actionMain.do"
+		concurrentExpiredUrl="/uat/uia/egovLoginUsr.do"
 
-		defaultTargetUrl="/uat/uia/actionMain.do"
+		defaultTargetUrl="/uat/uia/egovLoginUsr.do"
 		
         
     />

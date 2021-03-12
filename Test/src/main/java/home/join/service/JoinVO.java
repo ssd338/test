@@ -52,8 +52,18 @@ public class JoinVO{
     private String LASTLOGINIP;    // 최종 로그인 아이피
     private String CRTFCNO;       // 인증번호
     private String LOGINTRYCNT;    // 로그인 시도 횟수
+    
+    private String userSe;
+    
+    
 
     
+	public String getUserSe() {
+		return userSe;
+	}
+	public void setUserSe(String userSe) {
+		this.userSe = userSe;
+	}
 	public String getUsrNo() {
 		return usrNo;
 	}

@@ -28,9 +28,9 @@
 
 function actionLogin() {
 
-    if (document.loginForm.id.value =="") {
+    if (document.loginForm.usrId.value =="") {
         alert("아이디를 입력하세요");
-    } else if (document.loginForm.password.value =="") {
+    } else if (document.loginForm.encUsrPw.value =="") {
         alert("비밀번호를 입력하세요");
     } else {
         document.loginForm.action="<c:url value='/uat/uia/actionSecurityLogin.do'/>";
@@ -76,11 +76,11 @@ function saveid(form) {
         expdate.setTime(expdate.getTime() + 1000 * 3600 * 24 * 30); // 30일
     else
         expdate.setTime(expdate.getTime() - 1); // 쿠키 삭제조건
-    setCookie("saveid", form.id.value, expdate);
+    setCookie("saveid", form.usrId.value, expdate);
 }
 
 function getid(form) {
-    form.checkId.checked = ((form.id.value = getCookie("saveid")) != "");
+    form.checkId.checked = ((form.usrId.value = getCookie("saveid")) != "");
 }
 
 function fnInit() {
@@ -124,13 +124,13 @@ function fnInit() {
 	               <tr>
 	                 <td class="td_width">아이디</td>
 	                 <td class="td_content">
-	                     <input type="text" name="id" id="id" title="아이디" maxlength="10"/>
+	                     <input type="text" name="usrId" id="usrId" title="아이디" maxlength="10"/>
 	                 </td>
 	               </tr>
 	               <tr>
 	                 <td class="td_width">비밀번호</td>
 	                 <td class="td_content">
-	                     <input type="password" name="password" id="password" title="비밀번호" onKeyDown="javascript:if (event.keyCode == 13) { actionLogin(); }"/>
+	                     <input type="password" name="encUsrPw" id="encUsrPw" title="비밀번호" onKeyDown="javascript:if (event.keyCode == 13) { actionLogin(); }"/>
 	                     <input type="checkbox" name="checkId" id="checkId" title="암호저장여부" onClick="javascript:saveid(document.loginForm);" />ID저장
 	                 </td>
 	               </tr>
@@ -142,9 +142,7 @@ function fnInit() {
 	                <a href="#LINK" onClick="goRegiUsr();">회원가입</a>
 	             </div>
 	             <!-- 목록/저장버튼  끝-->
-            
-	             <input name="userSe" type="hidden" value="GNR"/>
-	             <input name="j_username" type="hidden"/>
+             	 <input name="userSe" type="hidden" value="GNR"/>
 		         </form>
                                    
                  </div>

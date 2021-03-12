@@ -11,7 +11,7 @@
     since    : 2011.08.31
 --%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ page import ="egovframework.com.cmm.LoginVO" %>
+<%@ page import ="home.join.service.JoinVO" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <div id="skipNav" class="invisible">
     <dl>
@@ -25,7 +25,7 @@
 	<div class="loginbg01"></div>
 	<div class="loginbg02">
 	    <%
-           LoginVO loginVO = (LoginVO)session.getAttribute("LoginVO");
+	    JoinVO loginVO = (JoinVO)session.getAttribute("LoginVO");
            if(loginVO == null){
         %>
 		<ul>
@@ -34,7 +34,7 @@
            <li><a href="<c:url value='/uat/uia/egovLoginUsr.do'/>">로그인</a></li>
         </ul>
         <% }else{ %>
-        <c:set var="loginName" value="<%= loginVO.getName()%>"/>
+        <c:set var="loginName" value="<%= loginVO.getEncUsrNm()%>"/>
         <ul>
             <li><a href="#LINK" onclick="alert('개인정보 확인 등의 링크 제공'); return false;"><c:out value="${loginName}"/> 님</a></li>
             <li>|</li>

@@ -4,18 +4,37 @@
 <sqlMap namespace="LoginUsr">
 
 	<typeAlias  alias="egovMap" type="egovframework.rte.psl.dataaccess.util.EgovMap"/>
-	<typeAlias  alias="loginVO" type="egovframework.com.cmm.LoginVO"/>
+	<typeAlias  alias="joinVO" type="home.join.service.JoinVO"/>
 
 	<!-- 로그인 처리를 위한 resultMap -->
-	<resultMap id="login" class="egovframework.com.cmm.LoginVO">
-		<result property="id" column="id" columnIndex="1"/>
-		<result property="name" column="name" columnIndex="2"/>
-		<result property="ihidNum" column="ihidNum" columnIndex="3"/>
-		<result property="email" column="email" columnIndex="4"/>
-		<result property="password" column="password" columnIndex="5"/>
-		<result property="userSe" column="userSe" columnIndex="6"/>
-		<result property="orgnztId" column="orgnztId" columnIndex="7"/>
-		<result property="uniqId" column="uniqId" columnIndex="8"/>		
+	<resultMap id="login" class="home.join.service.JoinVO">
+		<result property="usrNo" column="usr_no"/>
+		<result property="usrId" column="usr_id"/>
+		<result property="encUsrPw" column="enc_usr_pw"/>
+		<result property="birthday" column="birthday"/>
+		<result property="sexCd" column="sex_cd"/>
+		<result property="encUsrNm" column="enc_usr_nm"/>		
+		<result property="encEmail" column="enc_email"/>		
+		<result property="encMobileNo" column="enc_mobile_no"/>		
+		<result property="encPhoneNo" column="enc_phone_no"/>		
+		<result property="encHZipcode" column="enc_h_zipcode"/>		
+		<result property="encHAddress1" column="enc_h_address1"/>		
+		<result property="encHAddress2" column="enc_h_address2"/>		
+		<result property="doroPost" column="doro_post"/>		
+		<result property="doroAddr1" column="doro_addr1"/>		
+		<result property="doroAddr2" column="doro_addr2"/>		
+		<result property="doroAddrYn" column="doro_addr_yn"/>		
+		<result property="option1" column="option1"/>		
+		<result property="option2" column="option2"/>		
+		<result property="option3" column="option3"/>		
+		<result property="option4" column="option4"/>		
+		<result property="crtDt" column="crt_dt"/>		
+		<result property="udtDt" column="udt_dt"/>		
+		<result property="ESNTLID" column="ESNTL_ID"/>		
+<!-- 	<result property="LASTLOGINPNTTM" column="LAST_LOGIN_PNTTM"/>		
+		<result property="LASTLOGINIP" column="LAST_LOGIN_IP"/>		
+		<result property="CRTFCNO" column="CRTFC_NO"/>		
+		<result property="LOGINTRYCNT" column="LOGIN_TRY_CNT"/>		 -->
 	</resultMap>
 	
 	<!-- 아이디 찾기를 위한 resultMap 
@@ -29,24 +48,34 @@
 	</resultMap>
 	-->
 	<!-- 일반 로그인 -->
-	<select id="loginDAO.actionLogin" resultMap="login">
+	<select id="loginDAO.actionLogin" resultMap="login" parameterClass="joinVO">
         <!-- 일반회원 -->
-        <isEqual property="userSe" compareValue="GNR">
-            <![CDATA[
-            SELECT mber_id AS id
-                 , mber_nm AS name
-                 , ihidNum AS ihidNum
-                 , password AS password
-                 , mber_email_adres AS email
-                 , 'GNR' AS userSe
-                 , '-' AS orgnztId
-                 , esntl_id AS uniqId
-              FROM LETTNGNRLMBER
-             WHERE mber_id = #id#
-               AND password = #password#
-               AND mber_sttus = 'P'
-            ]]>
-        </isEqual>
+        SELECT usr_no
+             , usr_id
+             , enc_usr_pw
+             , birthday
+             , sex_cd
+             , enc_usr_nm
+             , enc_email
+             , enc_mobile_no
+             , enc_phone_no
+             , enc_h_zipcode
+             , enc_h_address1
+             , enc_h_address2
+             , doro_post
+             , doro_addr1
+             , doro_addr2
+             , doro_addr_yn
+             , option1
+             , option2
+             , option3
+             , option4
+             , crt_dt
+             , udt_dt
+             , ESNTL_ID
+        FROM tbl_usrm
+        WHERE usr_id = #usrId#
+              AND enc_usr_pw = #encUsrPw#
 	</select>
 	
 	<!-- 인증서 로그인

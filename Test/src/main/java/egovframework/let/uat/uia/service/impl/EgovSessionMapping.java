@@ -7,6 +7,7 @@ import egovframework.com.cmm.LoginVO;
 
 import egovframework.rte.fdl.security.userdetails.EgovUserDetails;
 import egovframework.rte.fdl.security.userdetails.jdbc.EgovUsersByUsernameMapping;
+import home.join.service.JoinVO;
 
 import javax.sql.DataSource;
 
@@ -52,31 +53,31 @@ public class EgovSessionMapping extends EgovUsersByUsernameMapping  {
 	protected EgovUserDetails mapRow(ResultSet rs, int rownum) throws SQLException {
     	logger.debug("## EgovUsersByUsernameMapping mapRow ##");
 
-        String strUserId    = rs.getString("user_id");
-        String strPassWord  = rs.getString("password");
-        boolean strEnabled  = rs.getBoolean("enabled");
+        String strUserId    = rs.getString("usr_id");
+        String strPassWord  = rs.getString("enc_usr_pw");
+        boolean strEnabled = true;
 
-        String strUserNm    = rs.getString("user_nm");
-        String strUserSe    = rs.getString("user_se");
-        String strUserEmail = rs.getString("user_email");
-        String strOrgnztId  = rs.getString("orgnzt_id");
-        String strUniqId    = rs.getString("esntl_id");
+        String strUserNm    = rs.getString("enc_usr_nm");
+//        String strUserSe    = rs.getString("user_se");
+        String strUserEmail = rs.getString("enc_email");
+//        String strOrgnztId  = rs.getString("orgnzt_id");
+        String strUniqId    = rs.getString("ESNTL_ID");
         /**2010.06.30 *이용   *조직명 추가  */
-        String strOrgnztNm    = rs.getString("orgnzt_nm");
+//        String strOrgnztNm    = rs.getString("orgnzt_nm");
 
 
 
         // 세션 항목 설정
-        LoginVO loginVO = new LoginVO();
-        loginVO.setId(strUserId);
-        loginVO.setPassword(strPassWord);
-        loginVO.setName(strUserNm);
-        loginVO.setUserSe(strUserSe);
-        loginVO.setEmail(strUserEmail);
-        loginVO.setOrgnztId(strOrgnztId);
-        loginVO.setUniqId(strUniqId);
+        JoinVO loginVO = new JoinVO();
+        loginVO.setUsrId(strUserId);
+        loginVO.setEncUsrPw(strPassWord);
+        loginVO.setEncUsrNm(strUserNm);
+//        loginVO.setUserSe(strUserSe);
+        loginVO.setEncEmail(strUserEmail);
+//        loginVO.setOrgnztId(strOrgnztId);
+        loginVO.setESNTLID(strUniqId);
         /**2010.06.30 *이용   *조직명 추가  */
-        loginVO.setOrgnztNm(strOrgnztNm);
+//        loginVO.setOrgnztNm(strOrgnztNm);
 
         return new EgovUserDetails(strUserId, strPassWord, strEnabled, loginVO);
     }
