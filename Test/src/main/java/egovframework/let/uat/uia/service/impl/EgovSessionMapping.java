@@ -58,12 +58,12 @@ public class EgovSessionMapping extends EgovUsersByUsernameMapping  {
         boolean strEnabled = true;
 
         String strUserNm    = rs.getString("enc_usr_nm");
-//        String strUserSe    = rs.getString("user_se");
+        String strUserSe    = rs.getString("user_se");
         String strUserEmail = rs.getString("enc_email");
 //        String strOrgnztId  = rs.getString("orgnzt_id");
         String strUniqId    = rs.getString("ESNTL_ID");
         /**2010.06.30 *이용   *조직명 추가  */
-//        String strOrgnztNm    = rs.getString("orgnzt_nm");
+//        String strOrgnztNm    = rs.getString("option2");
 
 
 
@@ -72,12 +72,12 @@ public class EgovSessionMapping extends EgovUsersByUsernameMapping  {
         loginVO.setUsrId(strUserId);
         loginVO.setEncUsrPw(strPassWord);
         loginVO.setEncUsrNm(strUserNm);
-//        loginVO.setUserSe(strUserSe);
+        loginVO.setUserSe(strUserSe);
         loginVO.setEncEmail(strUserEmail);
-//        loginVO.setOrgnztId(strOrgnztId);
+//        loginVO.setOrgnztId(null);
         loginVO.setESNTLID(strUniqId);
         /**2010.06.30 *이용   *조직명 추가  */
-//        loginVO.setOrgnztNm(strOrgnztNm);
+//        loginVO.setOption2(strOrgnztNm);
 
         return new EgovUserDetails(strUserId, strPassWord, strEnabled, loginVO);
     }

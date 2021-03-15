@@ -4,10 +4,8 @@
 <sqlMap namespace="Cmm">
 	<typeAlias  alias="egovMap" type="egovframework.rte.psl.dataaccess.util.EgovMap"/>
 	
-	<select id="cmmDAO.nextNo" parameterClass="java.util.HashMap" resultClass="int">
-		SELECT IFNULL(MAX(#cm#),0)+1
-		FROM (SELECT table_name
-		FROM INFORMATION_SCHEMA.tables
-		WHERE TABLE_NAME = #tb#)t
+	<select id="cmmDAO.nextNo" resultClass="int">
+		SELECT IFNULL(MAX(usr_no),0)+1
+		FROM tbl_usrm
 	</select>
 </sqlMap>

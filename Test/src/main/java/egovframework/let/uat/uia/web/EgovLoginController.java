@@ -67,7 +67,7 @@ public class EgovLoginController {
 	 * @exception Exception
 	 */
     @RequestMapping(value="/uat/uia/egovLoginUsr.do")
-	public String loginUsrView(@ModelAttribute("joinVO") JoinVO joinVO,
+	public String loginUsrView(@ModelAttribute("loginVO") LoginVO joinVO,
 			HttpServletRequest request,
 			HttpServletResponse response,
 			ModelMap model)

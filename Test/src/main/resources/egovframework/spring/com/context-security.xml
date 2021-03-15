@@ -26,9 +26,9 @@
         						 , doro_addr2, doro_addr_yn, option1, option2, option3, option4, crt_dt, udt_dt, ESNTL_ID
        							 FROM tbl_usrm WHERE usr_id = ?"
         
-        jdbcAuthoritiesByUsernameQuery="SELECT A.SCRTY_DTRMN_TRGET_ID USER_ID, A.AUTHOR_CODE AUTHORITY 
+        jdbcAuthoritiesByUsernameQuery="SELECT A.SCRTY_DTRMN_TRGET_ID usr_id, A.AUTHOR_CODE AUTHORITY 
         							FROM LETTNEMPLYRSCRTYESTBS A, tbl_usrm B 
-        							WHERE A.SCRTY_DTRMN_TRGET_ID = B.ESNTL_ID AND B.USER_ID = ?"
+        							WHERE A.SCRTY_DTRMN_TRGET_ID = B.ESNTL_ID AND B.usr_id = ?"
         									
         jdbcMapClass="egovframework.let.uat.uia.service.impl.EgovSessionMapping"
 

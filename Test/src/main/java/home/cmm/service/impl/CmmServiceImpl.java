@@ -4,6 +4,7 @@ import java.util.HashMap;
 
 import javax.annotation.Resource;
 
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Service;
 
 import egovframework.rte.fdl.cmmn.EgovAbstractServiceImpl;
@@ -15,13 +16,22 @@ public class CmmServiceImpl extends EgovAbstractServiceImpl implements CmmServic
 	@Resource(name="cmmDAO")
 	private CmmDAO cmmDAO;
 	
+	//다음 회원번호
 	@Override
-	public int nextNo(String cm, String table) throws Exception {
-		HashMap map = new HashMap();
-		map.put("cm", cm);
-		map.put("tb", table);
-		
-		return cmmDAO.nextNo(map);
+	public int nextNo(
+			) throws Exception {	
+		return cmmDAO.nextNo();
 	}
+//
+//	@Override
+//	public int nextNo(String cm, String table
+//			
+//			) throws Exception {
+//		HashMap map = new HashMap();
+//		map.put("cm", cm);
+//		map.put("tb", table);
+//		
+//		return cmmDAO.nextNo(map);
+//	}
 
 }

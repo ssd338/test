@@ -14,7 +14,6 @@ import home.join.service.JoinVO;
 import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.ModelAttribute;
 
 
 
@@ -32,8 +31,6 @@ public class JoinServiceImpl extends EgovAbstractServiceImpl implements JoinServ
 	@Resource(name = "egovAuthorGroupService")
   	private EgovAuthorGroupService egovAuthorGroupService;
   	
-	@Resource(name = "authorGroup")
-  	private AuthorGroup authorGroup;
 	
 	/** egovUsrCnfrmIdGnrService */
 	@Resource(name="egovUsrCnfrmIdGnrService")
@@ -46,6 +43,7 @@ public class JoinServiceImpl extends EgovAbstractServiceImpl implements JoinServ
 		return joinDAO.checkIdDplct(checkId);
 	}
 
+	/* 회원가입 */
 	@Override
 	public String insertMber(
 			JoinVO joinVO
@@ -55,7 +53,7 @@ public class JoinServiceImpl extends EgovAbstractServiceImpl implements JoinServ
 		joinVO.setESNTLID(uniqId);
 		
 		// 컬럼 명과 테이블 명을 주면 다음 숫자를 주는 기능
-		String usrNo =  String.valueOf(cmm.nextNo("usr_no", "tbl_usrm"));
+		String usrNo =  String.valueOf(cmm.nextNo());
 		joinVO.setUsrNo(usrNo);
 
 		//패스워드 암호화
@@ -64,12 +62,13 @@ public class JoinServiceImpl extends EgovAbstractServiceImpl implements JoinServ
 
 		String result = joinDAO.insertMber(joinVO);
 		
-		
+		AuthorGroup authorGroup = new AuthorGroup();
 		authorGroup.setUniqId(joinVO.getESNTLID());
-		authorGroup.setAuthorCode("GNR");
-		authorGroup.setMberTyCode("ROLE_USER_MEMBER");
+		authorGroup.setAuthorCode("ROLE_USER_MEMBER");
+		authorGroup.setMberTyCode("GNR");
 		
 		egovAuthorGroupService.insertAuthorGroup(authorGroup);
+		
 		
 		return result;
 	}
