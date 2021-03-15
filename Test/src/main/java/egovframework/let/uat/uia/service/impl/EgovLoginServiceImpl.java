@@ -42,24 +42,23 @@ public class EgovLoginServiceImpl extends EgovAbstractServiceImpl implements
 	 * @exception Exception
 	 */
     @Override
-	public JoinVO actionLogin(JoinVO vo) throws Exception {
+	public LoginVO actionLogin(LoginVO vo) throws Exception {
     	// 1. 입력한 비밀번호를 암호화한다.
-    	String enpassword = EgovFileScrty.encryptPassword(vo.getEncUsrPw(), vo.getUsrId());
-    	vo.setEncUsrPw(enpassword);
+    	String enpassword = EgovFileScrty.encryptPassword(vo.getPassword(), vo.getId());
+    	vo.setPassword(enpassword);
+
 
     	// 2. 아이디와 암호화된 비밀번호가 DB와 일치하는지 확인한다.
-
-    	JoinVO joinVO = loginDAO.actionLogin(vo);
+    	LoginVO loginVO = loginDAO.actionLogin(vo);
     	// 3. 결과를 리턴한다.
-    	if (joinVO != null && !joinVO.getUsrId().equals("") && !joinVO.getEncUsrPw().equals("")) {
-    		return joinVO;
+    	if (loginVO != null && !loginVO.getId().equals("") && !loginVO.getPassword().equals("")) {
+    		return loginVO;
     	} else {
-    		joinVO = new JoinVO();
+    		loginVO = new LoginVO();
     	}
 
-    	return joinVO;
+    	return loginVO;
     }
-
     /**
 	 * 아이디를 찾는다.
 	 * @param vo LoginVO

@@ -20,6 +20,18 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta http-equiv="content-language" content="ko">
 <link href="<c:url value='/'/>css/default.css" rel="stylesheet" type="text/css" >
+<script type="text/javascript">
+function actionLogin(form) {
+
+     if ($('#id').val() =="") {
+        alert("아이디를 입력하세요");
+    } else if ($('#password').val() =="") {
+        alert("비밀번호를 입력하세요");
+    } else {
+    	$(form).submit();
+    } 
+}
+</script>
 </head>
 <body>
 <!-- login status start -->
@@ -45,19 +57,22 @@
     		</ul>
     		<%  } else { %>
             <!-- 메인화면 로그인위치를 사용하는 경우 -->
+            <form name="Login" method="post" action="/uat/uia/actionSecurityLogin.do">
 			<ul>
 				<li>
-					<input  type="text" class="input_style" maxlength="25" title="아이디를 입력하세요." id="user_id" name="user_id" />
+					<input  type="text" class="input_style" maxlength="25" title="아이디를 입력하세요." name="id" id="id" />
 				</li>
 				<li>
-					<input  type="password" class="input_style" maxlength="25" title="비밀번호를 입력하세요." id="user_password" name="user_password" />
+					<input  type="password" class="input_style" maxlength="25" title="비밀번호를 입력하세요." name="password" id="password" />
 				</li>
 			</ul>
+			 <input name="userSe" type="hidden" value="GNR"/>
 			<ul class="btn_area">
 				<li><input disabled="disabled" type="checkbox" id="idsave"><label for="idsave">아이디 저장</label></li>
-				<li><a href="<c:url value='/uat/uia/actionSecurityLogin.do'/>"><img alt="로그인" src="<c:url value='/'/>images/header/btn_login.gif" /></a></li>
+				<li><input type="button" value="로그인" title="로그인" onclick="actionLogin(document.Login); return false;"></li>
+				
 			</ul>
-			
+			</form>
 	     <%  } %>
 		</div>
 	</div>
@@ -73,6 +88,7 @@
 		<!-- //중간 영역 끝 -->
 		<div id="rightcontent_wrap">
 			
+		</div>
 	</div>
 </div>
 <!-- //wrap end -->

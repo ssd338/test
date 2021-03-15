@@ -106,7 +106,6 @@ public class EgovFaqManageController {
     @RequestMapping(value="/uss/olh/faq/FaqListInqire.do")
     //@ModelAttribute("searchVO") 이부분은 아마도 뷰페이지로 searchVO의 정보가 searchVO라는 이름으로 전달됨을 지정하는듯
     public String selectFaqList(@ModelAttribute("searchVO") FaqManageDefaultVO searchVO, ModelMap model) throws Exception {
-    	System.out.println("하하"+searchVO.toString()+"끝!");
     	/** EgovPropertyService.SiteList */
     	searchVO.setPageUnit(propertiesService.getInt("pageUnit"));
     	searchVO.setPageSize(propertiesService.getInt("pageSize"));

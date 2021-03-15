@@ -76,7 +76,7 @@
 				</div>
 				<div id="content_field2" class="type">
 				<img  alt="기업회원가입" src="/images/home/Guser.png" class="im">
-				<a href="#"> <button class="joinBtn" id="joinBtn2">기업 회원가입</button></a>
+				<a href="/home/join/JoinCenterView.do"> <button class="joinBtn" id="joinBtn2">기업 회원가입</button></a>
 	            </div><!-- contents end -->
 	        </div>
 	    </div>

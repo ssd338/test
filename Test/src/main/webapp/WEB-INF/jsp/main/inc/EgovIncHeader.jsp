@@ -10,9 +10,10 @@
     author   : 실행환경개발팀 JJY
     since    : 2011.08.31
 --%>
+<%@page import="egovframework.com.cmm.LoginVO"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ page import ="home.join.service.JoinVO" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<script src="<c:url value="/js/jquery-1.11.3.min.js" />"></script>
 <div id="skipNav" class="invisible">
     <dl>
         <dt>콘텐츠 바로가기</dt>
@@ -25,7 +26,7 @@
 	<div class="loginbg01"></div>
 	<div class="loginbg02">
 	    <%
-	    JoinVO loginVO = (JoinVO)session.getAttribute("LoginVO");
+	    LoginVO loginVO = (LoginVO)session.getAttribute("LoginVO");
            if(loginVO == null){
         %>
 		<ul>
@@ -34,7 +35,7 @@
            <li><a href="<c:url value='/uat/uia/egovLoginUsr.do'/>">로그인</a></li>
         </ul>
         <% }else{ %>
-        <c:set var="loginName" value="<%= loginVO.getEncUsrNm()%>"/>
+        <c:set var="loginName" value="<%= loginVO.getName()%>"/>
         <ul>
             <li><a href="#LINK" onclick="alert('개인정보 확인 등의 링크 제공'); return false;"><c:out value="${loginName}"/> 님</a></li>
             <li>|</li>

@@ -9,7 +9,6 @@ import egovframework.let.uat.uia.service.EgovLoginService;
 import egovframework.rte.fdl.cmmn.trace.LeaveaTrace;
 import egovframework.rte.fdl.property.EgovPropertyService;
 import egovframework.rte.fdl.security.userdetails.util.EgovUserDetailsHelper;
-import home.join.service.JoinVO;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -67,7 +66,7 @@ public class EgovLoginController {
 	 * @exception Exception
 	 */
     @RequestMapping(value="/uat/uia/egovLoginUsr.do")
-	public String loginUsrView(@ModelAttribute("loginVO") LoginVO joinVO,
+	public String loginUsrView(@ModelAttribute("loginVO") LoginVO loginVO,
 			HttpServletRequest request,
 			HttpServletResponse response,
 			ModelMap model)
@@ -83,25 +82,27 @@ public class EgovLoginController {
 	 * @exception Exception
 	 */
     @RequestMapping(value="/uat/uia/actionSecurityLogin.do")
-    public String actionSecurityLogin(@ModelAttribute("joinVO") JoinVO joinVO,
-    		                   HttpServletRequest request, HttpServletResponse response,
-    		                   ModelMap model)
+    public String actionSecurityLogin(
+    		@ModelAttribute("loginVO") LoginVO loginVO
+    		, HttpServletRequest request
+    		, HttpServletResponse response
+    		, ModelMap model)
             throws Exception {
-
-    	// 1. 일반 로그인 처리
-    	JoinVO resultVO = loginService.actionLogin(joinVO);
+    	
+  
+    	System.out.println("하하");
+    	LoginVO resultVO = loginService.actionLogin(loginVO);
 
         boolean loginPolicyYn = true;
-
-        if (resultVO != null && resultVO.getUsrId() != null && !resultVO.getUsrId().equals("") && loginPolicyYn) {
-
+        if (resultVO != null && resultVO.getId() != null && !resultVO.getId().equals("") && loginPolicyYn) {
             // 2. spring security 연동
+        	// 세션
         	request.getSession().setAttribute("LoginVO", resultVO);
+        	
         	UsernamePasswordAuthenticationFilter springSecurity = null;
         	ApplicationContext act = WebApplicationContextUtils.getRequiredWebApplicationContext(request.getSession().getServletContext());
-        	
         	Map<String, UsernamePasswordAuthenticationFilter> beans = act.getBeansOfType(UsernamePasswordAuthenticationFilter.class);
-			if (beans.size() > 0) {
+        	if (beans.size() > 0) {
 				springSecurity = (UsernamePasswordAuthenticationFilter) beans.values().toArray()[0];
 				springSecurity.setUsernameParameter("egov_security_username");
 				springSecurity.setPasswordParameter("egov_security_password");
@@ -110,10 +111,9 @@ public class EgovLoginController {
 				throw new IllegalStateException("No AuthenticationProcessingFilter");
 			}
         	springSecurity.setContinueChainBeforeSuccessfulAuthentication(false);	// false 이면 chain 처리 되지 않음.. (filter가 아닌 경우 false로...)
+        	springSecurity.doFilter(new RequestWrapperForSecurity(request, resultVO.getId() , resultVO.getUniqId()), response, null);
         	
-//        	springSecurity.doFilter(new RequestWrapperForSecurity(request, resultVO.getUserSe() + resultVO.getUsrId(), resultVO.getEncUsrPw()), response, null);
-        	springSecurity.doFilter(new RequestWrapperForSecurity(request, resultVO.getUsrId(), resultVO.getEncUsrPw()), response, null);
-        	return "forward:/uat/uia/egovLoginUsr.do";	// 성공 시 페이지.. (redirect 불가)
+        	return "forward:/cmm/main/mainPage.do";	// 성공 시 페이지.. (redirect 불가)
 
 
         } else {

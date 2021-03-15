@@ -20,7 +20,7 @@ public class CmmController {
 			String cm, String table
 			) throws Exception {
 		
-		int re = cmmService.nextNo(cm, table);
+		int re = cmmService.nextNo();
 		return re;
 	}
 	

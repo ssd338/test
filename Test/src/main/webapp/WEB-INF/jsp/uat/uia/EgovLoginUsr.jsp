@@ -26,17 +26,14 @@
 <title>로그인</title>
 <script type="text/javascript">
 
-function actionLogin() {
+function actionLogin(form) {
 
-    if (document.loginForm.usrId.value =="") {
+    if ($('#id').val() =="") {
         alert("아이디를 입력하세요");
-    } else if (document.loginForm.encUsrPw.value =="") {
+    } else if ($('#password').val() =="") {
         alert("비밀번호를 입력하세요");
     } else {
-        document.loginForm.action="<c:url value='/uat/uia/actionSecurityLogin.do'/>";
-        //document.loginForm.j_username.value = document.loginForm.userSe.value + document.loginForm.username.value;
-        //document.loginForm.action="<c:url value='/j_spring_security_check'/>";
-        document.loginForm.submit();
+    	$(form).submit();
     }
 }
 
@@ -80,7 +77,7 @@ function saveid(form) {
 }
 
 function getid(form) {
-    form.checkId.checked = ((form.usrId.value = getCookie("saveid")) != "");
+    form.checkId.checked = ((form.id.value = getCookie("saveid")) != "");
 }
 
 function fnInit() {
@@ -114,7 +111,7 @@ function fnInit() {
             <!--detail area start -->
             <div class="search_service">
                 <div class="search_top_table">  
-                <form name="loginForm" action ="<c:url value='/uat/uia/actionSecurityLogin.do'/>" method="post"> 
+                <form name="loginForm" action ="/uat/uia/actionSecurityLogin.do" method="post"> 
                 <div style="visibility:hidden;display:none;">
 	                <input name="iptSubmit1" type="submit" value="전송" title="전송" />
 	            </div> 
@@ -124,13 +121,13 @@ function fnInit() {
 	               <tr>
 	                 <td class="td_width">아이디</td>
 	                 <td class="td_content">
-	                     <input type="text" name="usrId" id="usrId" title="아이디" maxlength="10"/>
+	                     <input type="text" name="id" id="id" title="아이디" maxlength="10"/>
 	                 </td>
 	               </tr>
 	               <tr>
 	                 <td class="td_width">비밀번호</td>
 	                 <td class="td_content">
-	                     <input type="password" name="encUsrPw" id="encUsrPw" title="비밀번호" onKeyDown="javascript:if (event.keyCode == 13) { actionLogin(); }"/>
+	                     <input type="password" name="password" id="password" title="비밀번호" onKeyDown="javascript:if (event.keyCode == 13) { actionLogin(); }"/>
 	                     <input type="checkbox" name="checkId" id="checkId" title="암호저장여부" onClick="javascript:saveid(document.loginForm);" />ID저장
 	                 </td>
 	               </tr>
@@ -138,11 +135,13 @@ function fnInit() {
              
 	             <!-- 목록/저장버튼  시작-->
 	             <div class="buttons" align="center" style="margin-bottom:100px">
-	                <a href="#LINK" onClick="actionLogin()">로그인</a>
+	                <a href="#LINK" onClick="actionLogin(loginForm)">로그인</a>
 	                <a href="#LINK" onClick="goRegiUsr();">회원가입</a>
 	             </div>
 	             <!-- 목록/저장버튼  끝-->
-             	 <input name="userSe" type="hidden" value="GNR"/>
+            
+	             <input name="userSe" type="hidden" value="GNR"/>
+	             <input name="j_username" type="hidden"/>
 		         </form>
                                    
                  </div>
@@ -159,5 +158,3 @@ function fnInit() {
 
 </body>
 </html>
-
-

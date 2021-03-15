@@ -15,18 +15,17 @@
  	
     <egov-security:config id="securityConfig"
         loginUrl="/uat/uia/actionSecurityLogin.do"
-        logoutSuccessUrl="/uat/uia/actionMain.do"
+        logoutSuccessUrl="/cmm/main/mainPage.do"
         loginFailureUrl="/uat/uia/actionSecurityLogin.do?login_error=1"
         accessDeniedUrl="/sec/ram/accessDenied.do"		
 		
         dataSource="egov.dataSource"
         			
-        jdbcUsersByUsernameQuery="SELECT usr_no, usr_id, enc_usr_pw, birthday, sex_cd, enc_usr_nm, enc_email, enc_mobile_no,
-        						 enc_phone_no, enc_h_zipcode, enc_h_address1, enc_h_address2, doro_post, doro_addr1
-        						 , doro_addr2, doro_addr_yn, option1, option2, option3, option4, crt_dt, udt_dt, ESNTL_ID
-       							 FROM tbl_usrm WHERE usr_id = ?"
+        jdbcUsersByUsernameQuery="SELECT usr_id, ESNTL_ID AS PASSWORD, 1 ENABLED, enc_usr_nm, enc_h_zipcode, 
+        doro_addr1, enc_email, USER_SE,  '-' ORGNZT_ID, ESNTL_ID, 
+        							'-' ORGNZT_NM FROM CN WHERE usr_id = ?"
         
-        jdbcAuthoritiesByUsernameQuery="SELECT A.SCRTY_DTRMN_TRGET_ID usr_id, A.AUTHOR_CODE AUTHORITY 
+        jdbcAuthoritiesByUsernameQuery="SELECT A.SCRTY_DTRMN_TRGET_ID USER_ID, A.AUTHOR_CODE AUTHORITY 
         							FROM LETTNEMPLYRSCRTYESTBS A, tbl_usrm B 
         							WHERE A.SCRTY_DTRMN_TRGET_ID = B.ESNTL_ID AND B.usr_id = ?"
         									
@@ -38,9 +37,9 @@
         hashBase64="false"
 		
 		concurrentMaxSessons="1"
-		concurrentExpiredUrl="/uat/uia/egovLoginUsr.do"
+		concurrentExpiredUrl="/cmm/main/mainPage.do"
 
-		defaultTargetUrl="/uat/uia/egovLoginUsr.do"
+		defaultTargetUrl="/cmm/main/mainPage.do"
 		
         
     />

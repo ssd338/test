@@ -97,7 +97,7 @@ public class JoinController {
 	}
 	
 	
-	/** 회원가입  */
+	/** 일반 회원가입  */
 	@RequestMapping("/home/join/JoinMberRegist.do")
 	public String JoinMberRegist(
 			@ModelAttribute("joinVO") JoinVO joinVO
@@ -109,6 +109,30 @@ public class JoinController {
 		
 		return "forward:/uat/uia/egovLoginUsr.do";
 	}
+	
+	@RequestMapping("/home/join/JoinCenterView.do")
+	public String JoinCenterRegistView( 
+			@ModelAttribute("joinVO") JoinVO joinVO
+			, @RequestParam Map<String, Object> commandMap
+			, Model model
+			) throws Exception {
+		ComDefaultCodeVO vo = new ComDefaultCodeVO();
+		//성별구분코드를 코드정보로부터 조회
+		vo.setCodeId("COM014");
+		model.addAttribute("sexdstnCode_result", cmmUseService.selectCmmCodeDetail(vo));
+
+//		if (!"".equals(commandMap.get("realname"))) {
+//			model.addAttribute("mberNm", commandMap.get("realname")); //실명인증된 이름 - 주민번호 인증
+//   		    model.addAttribute("ihidnum", commandMap.get("ihidnum")); //실명인증된 주민등록번호 - 주민번호 인증
+//		}
+//		if (!"".equals(commandMap.get("realName"))) {
+//			model.addAttribute("mberNm", commandMap.get("realName")); //실명인증된 이름 - ipin인증
+//		}
+
+
+		return "home/join/JoinCenter";
+	}
+	
 	
 	
 	/* 회원가입시 아이디 중복 체크 폼 */
