@@ -4,6 +4,7 @@
 <sqlMap namespace="Join">
 	<typeAlias  alias="egovMap" type="egovframework.rte.psl.dataaccess.util.EgovMap"/>
 	<typeAlias  alias="JoinVO" type="home.join.service.JoinVO"/>
+	<typeAlias  alias="usrsigunguVO" type="home.join.service.UsrSigunguVO"/>
 	
 	<resultMap id="joinUser" class="home.join.service.JoinVO">
 		<result property="usrNo" column="usr_no"/>
@@ -35,7 +36,12 @@
 		
 	</resultMap>
 	
-	<select id="joinDao.checkUserId" resultClass="int">
+	<resultMap id="usrsigungu" class="home.join.service.UsrSigunguVO">
+		<result property="usrNo" column="usr_no"/>
+		<result property="sigunguCd" column="sigungu_cd"/>
+	</resultMap>
+	
+	<select id="joinDAO.checkUserId" resultClass="int">
 		<![CDATA[
 			SELECT COUNT(1) usedCnt
 			FROM tbl_usrm
@@ -127,4 +133,17 @@
                     , #ESNTLID#
                     )              
     </insert>
+   
+    <insert id="joinDAO.insertUsrSigungu" parameterClass="JoinVO">
+    	INSERT INTO LNK_USR_SIGUNGU
+    	(
+    		usr_no
+    		,sigungu_cd
+    	)
+    	VALUES(
+    		#usrNo#
+    		,#sigunguCd#
+    	)
+    </insert>
+    
 </sqlMap>

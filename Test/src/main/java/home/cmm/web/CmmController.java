@@ -1,13 +1,19 @@
 package home.cmm.web;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import home.cmm.service.CmmService;
+import home.cmm.service.SigunguVO;
 
 @Controller
 public class CmmController {
@@ -22,6 +28,14 @@ public class CmmController {
 		
 		int re = cmmService.nextNo();
 		return re;
+	}
+	
+	@RequestMapping(value="/sigunguList.ajax",method = RequestMethod.POST )
+	@ResponseBody
+	public List<SigunguVO> sigunguList(@RequestParam HashMap map) throws Exception {
+		String sidoCd = (String)map.get("sidoCd");
+		List<SigunguVO> sigungu = cmmService.getSigungu(sidoCd);
+		return sigungu;
 	}
 	
 }

@@ -10,7 +10,6 @@ public interface JoinService {
 	public int checkIdDplct(String checkId) throws Exception;
 	
 	/* 회원가입 */
-	public String insertMber(JoinVO joinVO) throws Exception;
-
-
+	public String insertMber(JoinVO joinVO, String type) throws Exception;
+	
 }

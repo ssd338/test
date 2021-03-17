@@ -1,5 +1,6 @@
 package home.join.web;
 
+import java.util.List;
 import java.util.Map;
 
 import egovframework.com.cmm.ComDefaultCodeVO;
@@ -8,7 +9,9 @@ import egovframework.com.cmm.service.EgovCmmUseService;
 
 
 import egovframework.rte.fdl.property.EgovPropertyService;
-
+import home.cmm.service.CmmService;
+import home.cmm.service.SidoVO;
+import home.cmm.service.SigunguVO;
 import home.join.service.JoinService;
 import home.join.service.JoinVO;
 
@@ -43,6 +46,9 @@ import org.springmodules.validation.commons.DefaultBeanValidator;
 @Controller
 public class JoinController {
 
+	@Resource(name = "cmmService")
+	private CmmService cmmService;
+	
 	/** joinService */
 	@Resource(name = "joinService")
 	private JoinService joinService;
@@ -51,6 +57,7 @@ public class JoinController {
 	@Resource(name = "EgovCmmUseService")
 	private EgovCmmUseService cmmUseService;
 
+	
 	/** EgovMessageSource */
     @Resource(name="egovMessageSource")
     EgovMessageSource egovMessageSource;
@@ -104,12 +111,13 @@ public class JoinController {
 			, BindingResult bindingResult
 			) throws Exception {
 /*		beanValidator.validate(joinVO, bindingResult);*/
-		
-		joinService.insertMber(joinVO);
+		String type="usr";
+		joinService.insertMber(joinVO,type);
 		
 		return "forward:/uat/uia/egovLoginUsr.do";
 	}
 	
+	/* 기업회원가입 */
 	@RequestMapping("/home/join/JoinCenterView.do")
 	public String JoinCenterRegistView( 
 			@ModelAttribute("joinVO") JoinVO joinVO
@@ -119,21 +127,25 @@ public class JoinController {
 		ComDefaultCodeVO vo = new ComDefaultCodeVO();
 		//성별구분코드를 코드정보로부터 조회
 		vo.setCodeId("COM014");
+		
 		model.addAttribute("sexdstnCode_result", cmmUseService.selectCmmCodeDetail(vo));
-
-//		if (!"".equals(commandMap.get("realname"))) {
-//			model.addAttribute("mberNm", commandMap.get("realname")); //실명인증된 이름 - 주민번호 인증
-//   		    model.addAttribute("ihidnum", commandMap.get("ihidnum")); //실명인증된 주민등록번호 - 주민번호 인증
-//		}
-//		if (!"".equals(commandMap.get("realName"))) {
-//			model.addAttribute("mberNm", commandMap.get("realName")); //실명인증된 이름 - ipin인증
-//		}
-
-
+		model.addAttribute("sido_result", cmmService.getSido());
+		
 		return "home/join/JoinCenter";
 	}
 	
-	
+	/** 기업 회원가입  */
+	@RequestMapping("/home/join/JoinCenterRegist.do")
+	public String JoinCenterRegist(
+			@ModelAttribute("joinVO") JoinVO joinVO
+			, BindingResult bindingResult
+			) throws Exception {
+/*		beanValidator.validate(joinVO, bindingResult);*/
+		String type="center";
+		joinService.insertMber(joinVO,type);
+		
+		return "forward:/uat/uia/egovLoginUsr.do";
+	}
 	
 	/* 회원가입시 아이디 중복 체크 폼 */
 	@RequestMapping("/home/join/JoinCheckIdView.do")

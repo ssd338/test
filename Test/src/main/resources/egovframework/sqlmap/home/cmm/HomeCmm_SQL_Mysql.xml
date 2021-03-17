@@ -3,9 +3,38 @@
 
 <sqlMap namespace="Cmm">
 	<typeAlias  alias="egovMap" type="egovframework.rte.psl.dataaccess.util.EgovMap"/>
+	<typeAlias  alias="sidoVO" type="home.cmm.service.SidoVO"/>
+	<typeAlias  alias="sigunguVO" type="home.cmm.service.SigunguVO"/>
+	
+	<resultMap id="sidoMap" class="sidoVO">
+		<result property="sidoCd" column="SIDO_CD" />
+		<result property="sidoNm" column="SIDO_NM" />
+	</resultMap>
+	<resultMap id="sigunguMap" class="sigunguVO">
+		<result property="sidoCd" column="SIDO_CD" />
+		<result property="sigunguCd" column="SIGUNGU_CD" />
+		<result property="sigunguNm" column="SIGUNGU_NM" />
+	</resultMap>
 	
 	<select id="cmmDAO.nextNo" resultClass="int">
 		SELECT IFNULL(MAX(usr_no),0)+1
 		FROM tbl_usrm
 	</select>
+	
+	<select id="cmmDAO.getSidoList" resultMap="sidoMap">
+		SELECT 
+			SIDO_CD
+			,SIDO_NM
+		FROM COM_SIDO
+	</select>
+	<select id="cmmDAO.getSigunguList" parameterClass="string" resultMap="sigunguMap">
+		SELECT 
+			SIDO_CD
+			, SIGUNGU_CD
+			, SIGUNGU_NM
+		FROM COM_SIGUNGU
+		WHERE #sidoCd#
+
+	</select>
+	
 </sqlMap>

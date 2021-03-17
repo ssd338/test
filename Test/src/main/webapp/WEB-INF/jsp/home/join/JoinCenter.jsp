@@ -35,6 +35,7 @@
 <validator:javascript formName="joinVO" staticJavascript="false" xhtml="true" cdata="false"/>
 <script type="text/javascript" src="<c:url value='/js/EgovZipPopup.js' />" ></script>
 <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+<script type="text/javascript" src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 <script>
 /* 우편 */
 function closeDaumPostcode() {
@@ -44,10 +45,8 @@ function closeDaumPostcode() {
 function getPost() {
 	var element_layer = document.getElementById('layer');
     new daum.Postcode({
-        oncomplete: function(data) {
-            
-            var addr = ''; // 주소 변수
-          
+        oncomplete: function(data) {         
+            var addr = ''; // 주소 변수         
             if (data.userSelectedType === 'R') { // 사용자가 도로명 주소를 선택했을 경우
                 addr = data.roadAddress;
                 document.getElementById("doroAddrYn").value = "Y"					// 도로인지 구주소인지
@@ -90,6 +89,7 @@ function getPost() {
    }
 /* 우편끝 */
 
+
 /* 아이디 중복체크 */
 function fnIdCheck(){
     var retVal;
@@ -112,6 +112,29 @@ function showModalDialogCallback(retVal) {
 }
 /* 아이디 중복체크 끝 */
 
+/* 시군구 선택 */
+ 
+function fnSido(){
+	var sido_cn = document.getElementById("sido").value
+	
+	$.ajax({
+        url: "/sigunguList.ajax",
+        method: "POST",
+        data: {sidoCd:sido_cn},
+        success: function(data) {
+        	alert("하하")
+			}
+				
+		});
+
+	
+}
+/* 	var option = sido.querySelector("option");
+	alert(option) */
+
+ 
+/* 시군구 선택 끝 */
+
 /* 가입버튼  */
 function fnSbscrb(){
 	if(validation()){
@@ -124,7 +147,7 @@ function fnSbscrb(){
 
 function validation(){
 	/* 입력값의 불필요한 공백이과 기호를 제거한후 다시 넣어준다 */
-	var arr = ['encUsrNm','encEmail','tel1','tel2','tel3','Mtel1','Mtel2','Mtel3','Address2','birthdayD','optionD'];
+	var arr = ['encUsrNm','encEmail','tel1','tel2','tel3','Address2','birthdayD'];
 	var stringRegx = /[~!@#$%^&*()_+|<>?:{}]/; 
 	var regex= /^[0-9]/g;
 	
@@ -144,7 +167,6 @@ function validation(){
 	document.getElementById("encPhoneNo").value = tel1 + tel2 + tel3
 	document.getElementById("doroAddr2").value = Address2
 	document.getElementById("encHAddress2").value = Address2
-	document.getElementById("option4").value = document.getElementById("optionD").value
 	document.getElementById("birthday").value = document.getElementById("birthdayD").value
 	
 	if(encUsrNm == null || encUsrNm == ""){
@@ -163,6 +185,7 @@ function validation(){
 	
 	return true;
 }
+
 </script>
 </head>
 <body>
@@ -281,15 +304,16 @@ function validation(){
 			                <td class="td_width">시도
 			                </td>
 			                <td class="td_content">
-			                	<select name="sido" class="txaIpt" id="sido">
+			                	<select name="sido" class="txaIpt" id="sido" onchange="fnSido()">
 			                		<option value="" selected>시도</option>
-			                		<option value="02" >02</option>
-			                		<option value="031" >031</option>	
+			                		<c:forEach items="${sido_result}" var="sido">
+			                			<option value="${sido.sidoCd}" >${sido.sidoNm}</option>
+			                		</c:forEach>
 			                	</select> 
-			                	<select name="guGun" class="txaIpt" id="sido">
+			                	<select name="gungu" class="txaIpt" id="gungu">
 			                		<option value="" selected>시군구</option>
-			                		<option value="02" >02</option>
-			                		<option value="031" >031</option>	
+			                		
+			                		
 			                	</select> 
 			                </td>
 			            </tr>

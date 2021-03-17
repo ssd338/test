@@ -52,12 +52,19 @@ public class JoinVO{
     private String LASTLOGINIP;    // 최종 로그인 아이피
     private String CRTFCNO;       // 인증번호
     private String LOGINTRYCNT;    // 로그인 시도 횟수
+    private String sigunguCd;
     
     private String userSe;
     
     
 
     
+	public String getSigunguCd() {
+		return sigunguCd;
+	}
+	public void setSigunguCd(String sigunguCd) {
+		this.sigunguCd = sigunguCd;
+	}
 	public String getUserSe() {
 		return userSe;
 	}

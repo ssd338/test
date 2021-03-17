@@ -1,14 +1,12 @@
 package home.cmm.service.impl;
 
-import java.util.HashMap;
-
+import java.util.List;
 import javax.annotation.Resource;
-
-import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Service;
-
 import egovframework.rte.fdl.cmmn.EgovAbstractServiceImpl;
 import home.cmm.service.CmmService;
+import home.cmm.service.SidoVO;
+import home.cmm.service.SigunguVO;
 
 @Service("cmmService")
 public class CmmServiceImpl extends EgovAbstractServiceImpl implements CmmService {
@@ -22,16 +20,18 @@ public class CmmServiceImpl extends EgovAbstractServiceImpl implements CmmServic
 			) throws Exception {	
 		return cmmDAO.nextNo();
 	}
-//
-//	@Override
-//	public int nextNo(String cm, String table
-//			
-//			) throws Exception {
-//		HashMap map = new HashMap();
-//		map.put("cm", cm);
-//		map.put("tb", table);
-//		
-//		return cmmDAO.nextNo(map);
-//	}
+
+	@Override
+	public List<SidoVO> getSido() throws Exception {
+		return cmmDAO.getSidoList();
+	}
+
+	@Override
+	public List<SigunguVO> getSigungu(String sidoCd) throws Exception {
+		// TODO Auto-generated method stub
+		return  cmmDAO.getSigunguList(sidoCd);
+	}
+
+
 
 }

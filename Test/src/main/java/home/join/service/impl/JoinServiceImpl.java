@@ -47,6 +47,7 @@ public class JoinServiceImpl extends EgovAbstractServiceImpl implements JoinServ
 	@Override
 	public String insertMber(
 			JoinVO joinVO
+			, String type
 			) throws Exception  {
 		//고유아이디 셋팅
 		String uniqId = idgenService.getNextStringId();
@@ -59,8 +60,14 @@ public class JoinServiceImpl extends EgovAbstractServiceImpl implements JoinServ
 		//패스워드 암호화
 		String pass = EgovFileScrty.encryptPassword(joinVO.getEncUsrPw(), joinVO.getUsrId());
 		joinVO.setEncUsrPw(pass);
-
+		
+		// db에 회원 등록
 		String result = joinDAO.insertMber(joinVO);
+		
+		//기관회원이라면 시군구 등록
+		if(type.equals("center")) {
+			joinDAO.insertUsrSigungu(joinVO);
+		}
 		
 		AuthorGroup authorGroup = new AuthorGroup();
 		authorGroup.setUniqId(joinVO.getESNTLID());
@@ -72,4 +79,6 @@ public class JoinServiceImpl extends EgovAbstractServiceImpl implements JoinServ
 		
 		return result;
 	}
+
+	
 }
