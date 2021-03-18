@@ -30,7 +30,7 @@ public class CmmController {
 		return re;
 	}
 	
-	@RequestMapping(value="/sigunguList.ajax",method = RequestMethod.POST )
+	@RequestMapping(value="/home/cmm/sigunguList.do",method = RequestMethod.POST )
 	@ResponseBody
 	public List<SigunguVO> sigunguList(@RequestParam HashMap map) throws Exception {
 		String sidoCd = (String)map.get("sidoCd");

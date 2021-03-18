@@ -113,35 +113,28 @@ function showModalDialogCallback(retVal) {
 /* 아이디 중복체크 끝 */
 
 /* 시군구 선택 */
- 
 function fnSido(){
-	var sido_cn = document.getElementById("sido").value
-	
+	var sido_cn = $("#sido").val();
 	$.ajax({
-        url: "/sigunguList.ajax",
+        url: "/home/cmm/sigunguList.do",
         method: "POST",
         data: {sidoCd:sido_cn},
         success: function(data) {
-        	alert("하하")
-			}
-				
-		});
-
-	
+        	$(".gungulist").remove();
+        	$.each(data, function(idx,item){
+        		var option = $("<option></option>").html(item.sigunguNm).attr("value",item.sigunguCd).addClass("gungulist")
+        		$(gungu).append(option);
+        	})
+		}	
+	});	
 }
-/* 	var option = sido.querySelector("option");
-	alert(option) */
-
- 
 /* 시군구 선택 끝 */
 
 /* 가입버튼  */
 function fnSbscrb(){
 	if(validation()){
 		var varForm = document.joinVO;
-		if(validateJoinVO(varForm)){
 	        document.joinVO.submit();
-	    }
 	}
 }
 
@@ -204,7 +197,7 @@ function validation(){
             <form:form commandName="joinVO" action="${pageContext.request.contextPath}/home/join/JoinMberRegist.do" name="joinVO"  method="post" >    
 	        
 	        <!-- sub title start -->
-            <div><h2>일반회원 가입</h2></div>
+            <div><h2>기관회원 가입</h2></div>
             <!-- sub title end -->
             
             <!--detail area start -->
@@ -310,7 +303,7 @@ function validation(){
 			                			<option value="${sido.sidoCd}" >${sido.sidoNm}</option>
 			                		</c:forEach>
 			                	</select> 
-			                	<select name="gungu" class="txaIpt" id="gungu">
+			                	<select name="sigunguCd" class="txaIpt" id="gungu">
 			                		<option value="" selected>시군구</option>
 			                		
 			                		
@@ -370,7 +363,7 @@ function validation(){
                 <a href="#LINK" onclick="javascript:document.mberManageVO.reset(); return false;">리셋<%-- <spring:message code="button.reset" /> --%></a>
             </div>
             </td></tr></table>
-
+			<input name="joinType" type="hidden" value="center">
             </form:form>
 
             </div><!-- contents end -->

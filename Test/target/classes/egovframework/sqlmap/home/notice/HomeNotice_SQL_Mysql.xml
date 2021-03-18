@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://www.ibatis.com/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="Join">
+	<typeAlias  alias="egovMap" type="egovframework.rte.psl.dataaccess.util.EgovMap"/>
+	<typeAlias  alias="noticeVO" type="home.notice.service.NoticeVO"/>
+	
+	
+	<resultMap id="notice" class="home.notice.service.NoticeVO">
+		<result property="bbs_section_cd" column="bbs_section_cd"/>
+		<result property="bbs_no" column="bbs_no"/>
+		<result property="depth_no" column="depth_no"/>
+		<result property="usr_no" column="usr_no"/>
+		<result property="enc_usr_nm" column="enc_usr_nm"/>
+		<result property="enc_email" column="enc_email"/>
+		<result property="department" column="department"/>
+		<result property="phone_no1" column="phone_no1"/>
+		<result property="phone_no2" column="phone_no2"/>
+		<result property="title" column="title"/>
+		<result property="contents" column="contents"/>
+		<result property="bbs_pw" column="bbs_pw"/>
+		<result property="pub_yn" column="pub_yn"/>
+		<result property="del_yn" column="del_yn"/>
+		<result property="notice_yn" column="notice_yn"/>
+		<result property="hit_cnt" column="hit_cnt"/>
+		<result property="crt_usr_no" column="crt_usr_no"/>
+		<result property="crt_dt" column="crt_dt"/>
+		<result property="udt_usr_no" column="udt_usr_no"/>
+		<result property="udt_dt" column="udt_dt"/>
+		<result property="gubun1" column="gubun1"/>
+		<result property="gubun2" column="gubun2"/>
+		<result property="content1" column="content1"/>
+		<result property="content2" column="content2"/>
+		<result property="content3" column="content3"/>
+		<result property="item01" column="item01"/>
+		<result property="item02" column="item02"/>
+		<result property="item03" column="item03"/>
+		<result property="item04" column="item04"/>
+		<result property="item05" column="item05"/>
+		<result property="item06" column="item06"/>
+		<result property="item07" column="item07"/>
+		<result property="item08" column="item08"/>
+		<result property="item09" column="item09"/>
+		<result property="item10" column="item10"/>
+		<result property="item11" column="item11"/>
+	</resultMap>
+	<resultMap id="tbl_bbsm" class="home.notice.service.NoticeVO">
+		<result property="bbs_section_cd" column="bbs_section_cd"/>
+		<result property="bbs_title" column="bbs_title"/>
+		<result property="use_comment_yn" column="use_comment_yn"/>
+		<result property="use_upload_yn" column="use_upload_yn"/>
+	</resultMap>
+	<sql id="noticeDAO.searchField">
+		<isNotEmpty prepend="AND" property="bbs_section_cd">
+			bbs_section_cd = #bbs_section_cd#
+		</isNotEmpty>
+	</sql>
+	
+	<select id="noticeDAO.getNoticeList" resultMap="tbl_bbsm">
+		SELECT * 
+		FROM tbl_bbsm
+	</select>
+	<select id="noticeDAO.selectNoticeList" parameterClass="noticeVO" resultMap="notice">
+		<![CDATA[
+			SELECT 
+			bbs_section_cd
+			, bbs_no
+			, bbs_option_cd
+			, depth_no
+			, usr_no
+			, enc_usr_nm 
+			, enc_email
+			, department
+			, phone_no1
+			, phone_no2
+			, title
+			, contents
+			, bbs_pw
+			, pub_yn
+			, del_yn
+			, notice_yn
+			, hit_cnt
+			, crt_usr_no
+			, crt_dt
+			, udt_usr_no 
+			, udt_dt
+			, gubun1
+			, gubun2
+			, content1
+			, content2
+			, content3
+			, item01
+			, item02
+			, item03
+			, item04
+			, item05
+			, item06
+			, item07
+			, item08
+			, item09
+			, item10
+			, item11 
+			FROM tbl_bbsd
+			WHERE 1=1
+			]]>
+			<include refid="noticeDAO.searchField" />
+		
+	</select>
+	
+	<select id="noticeDAO.selectListCnt" parameterClass="noticeVO" resultClass="int">
+		SELECT COUNT(*) totcnt
+		FROM tbl_bbsd
+		WHERE 1=1
+		<include refid="noticeDAO.searchField" />
+	</select>
+	<select id="noticeDAO.selectBbsTitle" parameterClass="noticeVO" resultClass="string">
+		SELECT bbs_title
+		FROM tbl_bbsm
+		WHERE bbs_section_cd = #bbs_section_cd#
+	</select>
+</sqlMap>

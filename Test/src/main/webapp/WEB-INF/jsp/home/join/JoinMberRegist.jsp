@@ -374,7 +374,7 @@ function validation(){
                 <a href="#LINK" onclick="javascript:document.mberManageVO.reset(); return false;">리셋<%-- <spring:message code="button.reset" /> --%></a>
             </div>
             </td></tr></table>
-
+			<input name="joinType" type="hidden" value="usr">
             </form:form>
 
             </div><!-- contents end -->

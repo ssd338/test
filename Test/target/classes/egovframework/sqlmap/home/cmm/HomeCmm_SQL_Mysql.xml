@@ -33,7 +33,7 @@
 			, SIGUNGU_CD
 			, SIGUNGU_NM
 		FROM COM_SIGUNGU
-		WHERE #sidoCd#
+		WHERE SIDO_CD = #sidoCd#
 
 	</select>
 	

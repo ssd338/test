@@ -45,16 +45,15 @@
 	</div>
 		<div class="loginbg03"></div>
 </div>
-<h1><a href="<c:url value='/'/>cmm/main/mainPage.do">템플릿 로고</a>
+<h1><a href="<c:url value='/'/>home/main/mainPage.do">템플릿 로고</a>
 </h1>
 <a href="<c:url value='/EgovPageLink.do?link=main/sample_menu/Intro'/>" target="_blank"><img width="20" height="20" src="<c:url value='/images/question.jpg'/>" alt="메뉴구성 설명" title="메뉴구성 설명"></a>
 
 <div id="TopSearch">
     <dl style="display: block;">
-		<dd class="first"><a href="#">표준프레임워크</a></dd>
-		<dd><a href="#"><strong>경량환경</strong></a></dd>
-		<dd><a href="#">내부업무</a></dd>
-		<dd><a href="#">모바일</a></dd>
+		<dd class="first"><a href="#">구인구직</a></dd>
+		<dd><a href="#"><strong>구인구직</strong></a></dd>
+		<dd><a href="#">구인구직</a></dd>
 	</dl>
     <form action="#LINK" name="TopSearchForm" id="TopSearchForm" method="post">
         <fieldset>
@@ -93,17 +92,27 @@
         document.selectOne.action = "<c:url value='/uat/uia/actionLogout.do'/>";
         document.selectOne.submit();
     }
+    function goNoticePage(notice_cd){
+    	document.getElementById("bbs_section_cd").value=notice_cd;
+    	document.menuListForm.action = "<c:url value='/selectNoticeList.do'/>";
+    	document.menuListForm.submit();
+    }
+    
 </script>
 <div id="topmenu_nav">
-    <ul>
-    	<c:forEach var="result" items="${list_headmenu}" varStatus="status">
-        <li><a href="#LINK" onclick="javascript:goMenuPage('<c:out value="${result.menuNo}"/>')"><c:out value="${result.menuNm}"/></a></li>
+    <ul>   	
+    	 <c:forEach var="notice" items="${list_notice}" varStatus="status">
+    	<li><a href="#LINK" onclick="javascript:goNoticePage('<c:out value="${notice.bbs_section_cd}"/>')"><c:out value="${notice.bbs_title}"/></a></li>      
         </c:forEach>
+        <c:forEach var="result" items="${list_headmenu}" varStatus="status">
+        <li><a href="#LINK" onclick="javascript:goMenuPage('<c:out value="${result.menuNo}"/>')"><c:out value="${result.menuNm}"/></a></li>
+        </c:forEach>    
     </ul>
 </div>
 
 <form name="menuListForm" action ="/sym/mnu/mpm/EgovMenuListSelect.do" method="post">
     <input type="hidden" id="menuNo" name="menuNo" value="<%=session.getAttribute("menuNo")%>" />
+    <input type="hidden" id="bbs_section_cd" name="bbs_section_cd" />
     <input type="hidden" id="link" name="link" value="" />
     <div style="width:0px; height:0px;">
     <c:forEach var="result" items="${list_menulist}" varStatus="status" >

@@ -45,7 +45,7 @@
     </div>
 		<div class="loginbg03"></div>
 </div>
-<h1><a href="<c:url value='/'/>cmm/main/mainPage.do">템플릿 로고</a>
+<h1><a href="<c:url value='/'/>home/main/mainPage.do">템플릿 로고</a>
     <a href="<c:url value='/EgovPageLink.do?link=main/sample_menu/Intro'/>" target="_blank"><img width="20" height="20" src="<c:url value='/images/question.jpg'/>" alt="메뉴구성 설명" title="메뉴구성 설명"></a>
 </h1>
 <div id="SubTopSearch">

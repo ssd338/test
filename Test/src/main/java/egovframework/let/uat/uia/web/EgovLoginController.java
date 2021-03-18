@@ -89,8 +89,6 @@ public class EgovLoginController {
     		, ModelMap model)
             throws Exception {
     	
-  
-    	System.out.println("하하");
     	LoginVO resultVO = loginService.actionLogin(loginVO);
 
         boolean loginPolicyYn = true;
@@ -113,7 +111,7 @@ public class EgovLoginController {
         	springSecurity.setContinueChainBeforeSuccessfulAuthentication(false);	// false 이면 chain 처리 되지 않음.. (filter가 아닌 경우 false로...)
         	springSecurity.doFilter(new RequestWrapperForSecurity(request, resultVO.getId() , resultVO.getUniqId()), response, null);
         	
-        	return "forward:/cmm/main/mainPage.do";	// 성공 시 페이지.. (redirect 불가)
+        	return "forward:/home/main/mainPage.do";	// 성공 시 페이지.. (redirect 불가)
 
 
         } else {
@@ -140,7 +138,7 @@ public class EgovLoginController {
     	}
 
 		// 2. 메인 페이지 이동
-    	return "forward:/cmm/main/mainPage.do";
+    	return "forward:/home/main/mainPage.do";
 
 	}
 

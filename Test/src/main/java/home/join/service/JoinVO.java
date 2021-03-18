@@ -53,12 +53,19 @@ public class JoinVO{
     private String CRTFCNO;       // 인증번호
     private String LOGINTRYCNT;    // 로그인 시도 횟수
     private String sigunguCd;
+    private String joinType;
     
     private String userSe;
     
     
 
     
+	public String getJoinType() {
+		return joinType;
+	}
+	public void setJoinType(String joinType) {
+		this.joinType = joinType;
+	}
 	public String getSigunguCd() {
 		return sigunguCd;
 	}

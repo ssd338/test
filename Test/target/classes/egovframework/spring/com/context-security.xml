@@ -15,7 +15,7 @@
  	
     <egov-security:config id="securityConfig"
         loginUrl="/uat/uia/actionSecurityLogin.do"
-        logoutSuccessUrl="/cmm/main/mainPage.do"
+        logoutSuccessUrl="/home/main/mainPage.do"
         loginFailureUrl="/uat/uia/actionSecurityLogin.do?login_error=1"
         accessDeniedUrl="/sec/ram/accessDenied.do"		
 		
@@ -37,9 +37,9 @@
         hashBase64="false"
 		
 		concurrentMaxSessons="1"
-		concurrentExpiredUrl="/cmm/main/mainPage.do"
+		concurrentExpiredUrl="/home/main/mainPage.do"
 
-		defaultTargetUrl="/cmm/main/mainPage.do"
+		defaultTargetUrl="/home/main/mainPage.do"
 		
         
     />

@@ -26,8 +26,8 @@ public class JoinDAO extends EgovAbstractDAO{
 	}
 	
 	/* 회원가입시 해당 유저의 시군구코드를 유저시군구에 insert */
-	public int insertUsrSigungu(JoinVO joinVO) {
-		return (Integer)insert("joinDAO.insertUsrSigungu",joinVO);
+	public void insertUsrSigungu(JoinVO joinVO) {
+		insert("joinDAO.insertUsrSigungu",joinVO);
 	}
 
 }

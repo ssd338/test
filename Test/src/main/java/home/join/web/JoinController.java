@@ -98,23 +98,7 @@ public class JoinController {
 //		if (!"".equals(commandMap.get("realName"))) {
 //			model.addAttribute("mberNm", commandMap.get("realName")); //실명인증된 이름 - ipin인증
 //		}
-
-
 		return "home/join/JoinMberRegist";
-	}
-	
-	
-	/** 일반 회원가입  */
-	@RequestMapping("/home/join/JoinMberRegist.do")
-	public String JoinMberRegist(
-			@ModelAttribute("joinVO") JoinVO joinVO
-			, BindingResult bindingResult
-			) throws Exception {
-/*		beanValidator.validate(joinVO, bindingResult);*/
-		String type="usr";
-		joinService.insertMber(joinVO,type);
-		
-		return "forward:/uat/uia/egovLoginUsr.do";
 	}
 	
 	/* 기업회원가입 */
@@ -134,18 +118,19 @@ public class JoinController {
 		return "home/join/JoinCenter";
 	}
 	
-	/** 기업 회원가입  */
-	@RequestMapping("/home/join/JoinCenterRegist.do")
-	public String JoinCenterRegist(
+	
+	/**  회원가입  */
+	@RequestMapping("/home/join/JoinMberRegist.do")
+	public String JoinMberRegist(
 			@ModelAttribute("joinVO") JoinVO joinVO
 			, BindingResult bindingResult
 			) throws Exception {
 /*		beanValidator.validate(joinVO, bindingResult);*/
-		String type="center";
-		joinService.insertMber(joinVO,type);
+		joinService.insertMber(joinVO);
 		
 		return "forward:/uat/uia/egovLoginUsr.do";
 	}
+	
 	
 	/* 회원가입시 아이디 중복 체크 폼 */
 	@RequestMapping("/home/join/JoinCheckIdView.do")
