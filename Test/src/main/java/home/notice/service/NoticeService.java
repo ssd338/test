@@ -18,6 +18,12 @@ public interface NoticeService {
 	public int selectListCnt(NoticeVO noticeVO) throws Exception;
 	
 	/* 게시판의 이름을 가져온다 */
-	public String selectBbsTitle(NoticeVO noticeVO) throws Exception;
+	public NoticeVO selectBbsTitle(NoticeVO noticeVO) throws Exception;
+	
+	public NoticeVO selectDetail(NoticeVO noticeVO) throws Exception;
+	
+	public void updateReadCnt(NoticeVO noticeVO) throws Exception;
+
+	public Object ntBfList(NoticeVO noticeVO) throws Exception;
 	
 }

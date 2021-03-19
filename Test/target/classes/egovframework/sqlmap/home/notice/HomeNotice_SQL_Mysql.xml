@@ -47,12 +47,37 @@
 	<resultMap id="tbl_bbsm" class="home.notice.service.NoticeVO">
 		<result property="bbs_section_cd" column="bbs_section_cd"/>
 		<result property="bbs_title" column="bbs_title"/>
+		<result property="bbs_nm" column="bbs_nm"/>
 		<result property="use_comment_yn" column="use_comment_yn"/>
 		<result property="use_upload_yn" column="use_upload_yn"/>
 	</resultMap>
 	<sql id="noticeDAO.searchField">
 		<isNotEmpty prepend="AND" property="bbs_section_cd">
 			bbs_section_cd = #bbs_section_cd#
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="searchType1">
+			item01 LIKE CONCAT ('%', #searchType1#,'%')
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="searchType2">
+			item02 LIKE CONCAT ('%', #searchType2#,'%')
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="searchType3">
+			item03 LIKE CONCAT ('%', #searchType3#,'%')
+		</isNotEmpty>
+		<isNotEmpty>
+		<isEqual prepend="AND" property="searchCnd" compareValue="0">
+			title LIKE CONCAT ('%', #searchWrd#,'%') 
+		</isEqual>
+		</isNotEmpty>
+		<isNotEmpty>
+		<isEqual prepend="AND" property="searchCnd" compareValue="1">
+			contents LIKE CONCAT ('%', #searchWrd#,'%') 	
+		</isEqual>	
+		</isNotEmpty>
+		<isNotEmpty>
+		<isEqual prepend="AND" property="searchCnd" compareValue="2">
+			enc_usr_nm LIKE CONCAT ('%', #searchWrd#,'%') 	
+		</isEqual>
 		</isNotEmpty>
 	</sql>
 	
@@ -104,7 +129,10 @@
 			WHERE 1=1
 			]]>
 			<include refid="noticeDAO.searchField" />
-		
+		<![CDATA[
+ 			ORDER BY bbs_no ASC
+			LIMIT #recordCountPerPage# OFFSET #firstIndex#
+		]]>
 	</select>
 	
 	<select id="noticeDAO.selectListCnt" parameterClass="noticeVO" resultClass="int">
@@ -113,9 +141,75 @@
 		WHERE 1=1
 		<include refid="noticeDAO.searchField" />
 	</select>
-	<select id="noticeDAO.selectBbsTitle" parameterClass="noticeVO" resultClass="string">
-		SELECT bbs_title
+	
+	<select id="noticeDAO.selectBbsTitle" parameterClass="noticeVO" resultMap="tbl_bbsm">
+		SELECT bbs_section_cd
+		, bbs_title
+		, bbs_nm
+		, use_comment_yn
+		, use_upload_yn
 		FROM tbl_bbsm
 		WHERE bbs_section_cd = #bbs_section_cd#
 	</select>
+	<select id="noticeDAO.ntBfList" parameterClass="noticeVO" resultMap="notice">
+	 (
+	  SELECT 
+	  	bbs_section_cd
+	  	, bbs_no
+	 	, title
+	  FROM tbl_bbsd
+	  WHERE bbs_no  <![CDATA[ > ]]> #bbs_no#
+	 ) L
+	  
+	</select>
+	
+	<select id="noticeDAO.selectDetail" parameterClass="noticeVO" resultMap="notice">
+		SELECT 
+			bbs_section_cd
+			, bbs_no
+			, bbs_option_cd
+			, depth_no
+			, usr_no
+			, enc_usr_nm 
+			, enc_email
+			, department
+			, phone_no1
+			, phone_no2
+			, title
+			, contents
+			, bbs_pw
+			, pub_yn
+			, del_yn
+			, notice_yn
+			, hit_cnt
+			, crt_usr_no
+			, crt_dt
+			, udt_usr_no 
+			, udt_dt
+			, gubun1
+			, gubun2
+			, content1
+			, content2
+			, content3
+			, item01
+			, item02
+			, item03
+			, item04
+			, item05
+			, item06
+			, item07
+			, item08
+			, item09
+			, item10
+			, item11 
+			FROM tbl_bbsd
+			WHERE 1=1
+			AND bbs_no = #bbs_no#
+	</select>
+	<update id="noticeDAO.updateReadCnt" parameterClass="noticeVO">
+		UPDATE tbl_bbsd SET
+				  hit_cnt = IFNULL(hit_cnt,0)+1
+		   WHERE bbs_no = #bbs_no#
+	</update>
+	
 </sqlMap>

@@ -14,6 +14,18 @@
         <context:include-filter type="annotation" expression="org.springframework.stereotype.Repository"/>
     </context:component-scan>
 
+	<!-- For Pagination Tag 설정-->
+    <bean id="imageRenderer" class="egovframework.com.cmm.ImagePaginationRenderer"/>
+    <bean id="textRenderer" class="egovframework.rte.ptl.mvc.tags.ui.pagination.DefaultPaginationRenderer"/>
+    <bean id="paginationManager" class="egovframework.rte.ptl.mvc.tags.ui.pagination.DefaultPaginationManager">
+        <property name="rendererType">
+            <map>
+                <entry key="image" value-ref="imageRenderer"/> 
+                <entry key="text" value-ref="textRenderer"/>
+            </map>
+        </property>
+    </bean>
+
     <!-- 서블릿컨네이너상의 exception에 대한 오류 페이지를 연결하는 mvc 설정 -->
     <bean class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">
         <property name="defaultErrorView" value="cmm/error/egovError"/>

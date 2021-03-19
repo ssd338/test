@@ -57,7 +57,7 @@ public class JobOfferController {
 	
 	
 	/* 구인 게시판으로 */
-	@RequestMapping("/home/main/NoticeMenu.do")
+	@RequestMapping("/home/notice/JobOffer/JobOfferList.do")
 	public String JobOfferListView( 
 			 @RequestParam Map<String, Object> commandMap
 			, Model model
@@ -65,5 +65,7 @@ public class JobOfferController {
 	
 		return "home/notice/JobOffer/JobOfferList";
 	}
+	
+	
 	
 }

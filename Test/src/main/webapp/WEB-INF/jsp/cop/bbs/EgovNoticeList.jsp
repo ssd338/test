@@ -30,7 +30,7 @@
 <c:choose>
 <c:when test="${preview == 'true'}">
 <script type="text/javascript">
-<!--
+
 	function press(event) {
 	}
 
@@ -42,12 +42,12 @@
 
 	function fn_egov_inqire_notice(nttId, bbsId) {
 	}
-//-->
+
 </script>
 </c:when>
 <c:otherwise>
 <script type="text/javascript">
-<!--
+
 	function press(event) {
 		if (event.keyCode==13) {
 			fn_egov_select_noticeList('1');
@@ -71,7 +71,7 @@
 		//document.subForm.action = "<c:url value='/cop/bbs${prefix}/selectBoardArticle.do'/>";
 		//document.subForm.submit();
 	}
-//-->
+
 </script>
 </c:otherwise>
 </c:choose>

@@ -5,6 +5,7 @@ import java.util.Date;
 public class NoticeVO {
 	private String bbs_section_cd;
 	private String bbs_title;
+	private String bbs_nm;
 	private String use_comment_yn;
 	private String use_upload_yn;
 	
@@ -32,21 +33,21 @@ public class NoticeVO {
 	private String content1;
 	private String content2;
 	private String content3;
-	private String item01;
-	private String item02;
-	private String item03;
-	private String item04;
-	private String item05;
-	private String item06;
-	private String item07;
-	private String item08;
-	private String item09;
-	private String item10;
+	private String item01;			// searchType1
+	private String item02;			// searchType2
+	private String item03;			// searchType3
+	private String item04;			// 인원
+	private String item05;			// 글
+	private String item06;			// 필요서류
+	private String item07;			// 지원기간
+	private String item08;			// 지원방식
+	private String item09;			// 근무기간
+	private String item10;			// 급여
 	private String item11;
 	
 	private int recordCountPerPage = 10;
 	private int pageIndex = 1;				// 현재 페이지 인덱스
-	private int pageUnit = 12;
+	private int pageUnit = 10;
 	private int pageUnit10 = 10;
 	private int pageSize = 10;
 	private int mobilePageSize = 5;
@@ -55,7 +56,64 @@ public class NoticeVO {
 	private int limit = 5;
 	private int fixedPage = 0;
 	
+	private String searchCnd = "0";		// 0 제목, 1 내용, 2 작성자
+	private String searchWrd ="";
+	private String searchType1 ="";		// 근무형태
+	private String searchType2 ="";		// 직종
+	private String searchType3 ="";		// 지역
+	private String searchType4 ="";		// 기간
+	private String searchType5 ="";		
 	
+	
+	
+	public String getSearchType1() {
+		return searchType1;
+	}
+	public void setSearchType1(String searchType1) {
+		this.searchType1 = searchType1;
+	}
+	public String getSearchType2() {
+		return searchType2;
+	}
+	public void setSearchType2(String searchType2) {
+		this.searchType2 = searchType2;
+	}
+	public String getSearchType3() {
+		return searchType3;
+	}
+	public void setSearchType3(String searchType3) {
+		this.searchType3 = searchType3;
+	}
+	public String getSearchType4() {
+		return searchType4;
+	}
+	public void setSearchType4(String searchType4) {
+		this.searchType4 = searchType4;
+	}
+	public String getSearchType5() {
+		return searchType5;
+	}
+	public void setSearchType5(String searchType5) {
+		this.searchType5 = searchType5;
+	}
+	public String getSearchWrd() {
+		return searchWrd;
+	}
+	public void setSearchWrd(String searchWrd) {
+		this.searchWrd = searchWrd;
+	}
+	public String getSearchCnd() {
+		return searchCnd;
+	}
+	public void setSearchCnd(String searchCnd) {
+		this.searchCnd = searchCnd;
+	}
+	public String getBbs_nm() {
+		return bbs_nm;
+	}
+	public void setBbs_nm(String bbs_nm) {
+		this.bbs_nm = bbs_nm;
+	}
 	public String getBbs_section_cd() {
 		return bbs_section_cd;
 	}

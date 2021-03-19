@@ -29,14 +29,27 @@ public class NoticeServiceimpl extends EgovAbstractServiceImpl implements Notice
 
 	@Override
 	public int selectListCnt(NoticeVO noticeVO) throws Exception {
-		// TODO Auto-generated method stub
 		return (Integer)noticeDAO.selectListCnt(noticeVO);
 	}
 	
 	@Override
-	public String selectBbsTitle(NoticeVO noticeVO) throws Exception {
-		// TODO Auto-generated method stub
-		return (String)noticeDAO.selectBbsTitle(noticeVO);
+	public NoticeVO selectBbsTitle(NoticeVO noticeVO) throws Exception {
+		return (NoticeVO)noticeDAO.selectBbsTitle(noticeVO);
+	}
+
+	@Override
+	public void updateReadCnt(NoticeVO noticeVO) throws Exception {
+		noticeDAO.updateReadCnt(noticeVO);
+	}
+
+	@Override
+	public NoticeVO selectDetail(NoticeVO noticeVO) throws Exception {
+		return (NoticeVO)noticeDAO.selectDetail(noticeVO);
+	}
+
+	@Override
+	public Object ntBfList(NoticeVO noticeVO) throws Exception {
+		return (List<NoticeVO>)noticeDAO.ntBfList(noticeVO);
 	}
 
 }

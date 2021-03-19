@@ -17,12 +17,26 @@ public class NoticeDAO extends EgovComAbstractDAO{
 	public Integer selectListCnt(NoticeVO noticeVO)  throws Exception {
 		return (Integer)select("noticeDAO.selectListCnt", noticeVO);
 	}
-	public String selectBbsTitle(NoticeVO noticeVO)  throws Exception {
-		return (String)select("noticeDAO.selectBbsTitle", noticeVO);
+	//게시판 정보
+	public NoticeVO selectBbsTitle(NoticeVO noticeVO)  throws Exception {
+		return (NoticeVO)select("noticeDAO.selectBbsTitle", noticeVO);
 	}
 
 	public List<NoticeVO> getNoticeList() {
 		return (List<NoticeVO>)list("noticeDAO.getNoticeList");
+	}
+	//조회수 증가
+	public void updateReadCnt(NoticeVO noticeVO) {
+		update("noticeDAO.updateReadCnt", noticeVO);
+		
+	}
+
+	public NoticeVO selectDetail(NoticeVO noticeVO) {
+		return (NoticeVO)select("noticeDAO.selectDetail", noticeVO);
+	}
+
+	public List<NoticeVO> ntBfList(NoticeVO noticeVO) {
+		return (List<NoticeVO>)list("noticeDAO.ntBfList", noticeVO);
 	}
 	
 }
