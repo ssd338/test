@@ -236,8 +236,8 @@ public class EgovFaqManageController {
 		final Map<String, MultipartFile> files = multiRequest.getFileMap();
 
 		if(!files.isEmpty()){
-		 _result = fileUtil.parseFileInf(files, "FAQ_", 0, "", "");
-		 _atchFileId = fileMngService.insertFileInfs(_result);  //파일이 생성되고나면 생성된 첨부파일 ID를 리턴한다.
+		 _result = fileUtil.parseFileInf(files, "FAQ_", 0, "", "");			// 실제 로컬에 저장되는건 이부분인듯
+		 _atchFileId = fileMngService.insertFileInfs(_result);  			// 디비에 저장, 파일이 생성되고나면 생성된 첨부파일 ID를 리턴한다.
 		}
 
     	// 리턴받은 첨부파일ID를 셋팅한다..

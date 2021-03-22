@@ -2,6 +2,8 @@ package home.cmm.service;
 
 import java.util.List;
 
+import home.join.service.JoinVO;
+
 public interface CmmService {
 
 
@@ -13,4 +15,5 @@ public interface CmmService {
 	
 	/* 시군에 해당하는 시군구 조회 */
 	public List<SigunguVO> getSigungu(String sidoCd) throws Exception;
+
 }

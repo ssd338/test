@@ -69,8 +69,10 @@ public class EgovFileMngServiceImpl extends EgovAbstractServiceImpl implements E
 
 		if (fvoList.size() != 0) {
 			atchFileId = fileMngDAO.insertFileInfs(fvoList);
+			System.out.println("파일등록dao");
 		}
 		if (atchFileId == "") {
+			System.out.println("파일등록dao비었음");
 			atchFileId = null;
 		}
 		return atchFileId;

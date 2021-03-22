@@ -70,69 +70,72 @@ public class EgovFileMngUtil {
     public List<FileVO> parseFileInf(Map<String, MultipartFile> files, String KeyStr, int fileKeyParam, String atchFileId, String storePath) throws Exception {
 	int fileKey = fileKeyParam;
 
-	String storePathString = "";
-	String atchFileIdString = "";
+	String storePathString = "";				// 저장위치?
+	String atchFileIdString = "";				// 파일 아이디?
 
-	if ("".equals(storePath) || storePath == null) {
-	    storePathString = propertyService.getString("Globals.fileStorePath");
+	if ("".equals(storePath) || storePath == null) {								// storePath가 비어있다면
+	    storePathString = propertyService.getString("Globals.fileStorePath");		// Globals.fileStorePath에 설정되어있는 주소를 가져온다. 
 	} else {
-	    storePathString = propertyService.getString(storePath);
+	    storePathString = propertyService.getString(storePath);						// storePath에 주소값이 있다면 그 주소를 가져온다. storePathString = 파일의 저장위치
 	}
 
-	if ("".equals(atchFileId) || atchFileId == null) {
-	    atchFileIdString = idgenService.getNextStringId();
+	if ("".equals(atchFileId) || atchFileId == null) {								
+	    atchFileIdString = idgenService.getNextStringId();							// 파일 id가 없을경우 String형식의 다음아이디 만들어줌
 	} else {
-	    atchFileIdString = atchFileId;
+	    atchFileIdString = atchFileId;												// 파일 id 있으면 그거 사용
 	}
 
-	File saveFolder = new File(storePathString);
+	File saveFolder = new File(storePathString);									// 저장주소를 매개로 file															
 
-	if (!saveFolder.exists() || saveFolder.isFile()) {
+	if (!saveFolder.exists() || saveFolder.isFile()) {								
 	    saveFolder.mkdirs();
 	}
 
-	Iterator<Entry<String, MultipartFile>> itr = files.entrySet().iterator();
+	Iterator<Entry<String, MultipartFile>> itr = files.entrySet().iterator();		// 파일 갯수만큼 배열을 도는건가?
 	MultipartFile file;
-	String filePath = "";
+	String filePath = "";															// 저장위치?
 	List<FileVO> result  = new ArrayList<FileVO>();
 	FileVO fvo;
 
+	/* 받아온 맵의 길이만큼 배열을 돌면서 파일을 저장하고 list에 담는다. */
 	while (itr.hasNext()) {
-	    Entry<String, MultipartFile> entry = itr.next();
+	    Entry<String, MultipartFile> entry = itr.next();							// 다음 파일 값을 가져옴
 
-	    file = entry.getValue();
-	    String orginFileName = file.getOriginalFilename();
+	    file = entry.getValue();													// MultipartFile을 가져옴
+	    String orginFileName = file.getOriginalFilename();							// 파일의 원래 이름을 가져옴
 
 	    //--------------------------------------
 	    // 원 파일명이 없는 경우 처리
 	    // (첨부가 되지 않은 input file type)
 	    //--------------------------------------
-	    if ("".equals(orginFileName)) {
+	    if ("".equals(orginFileName)) {	
+	    	System.out.println("엥?");
 		continue;
 	    }
 	    ////------------------------------------
 
-	    int index = orginFileName.lastIndexOf(".");
+	    int index = orginFileName.lastIndexOf(".");									// 파일이름에서 확장자를 추출
 	    //String fileName = orginFileName.substring(0, index);
-	    String fileExt = orginFileName.substring(index + 1);
-	    String newName = KeyStr + EgovStringUtil.getTimeStamp() + fileKey;
+	    String fileExt = orginFileName.substring(index + 1);			
+	    String newName = KeyStr + EgovStringUtil.getTimeStamp() + fileKey;			// 저장용 이름 <= (받아온 문자열 +  시간 + 숫자)
 	    long _size = file.getSize();
 
-	    if (!"".equals(orginFileName)) {
-		filePath = storePathString + File.separator + newName;
-		file.transferTo(new File(filePath));
+	    if (!"".equals(orginFileName)) {											// 파일 이름이 있다면
+		filePath = storePathString + File.separator + newName;						// 파일 저장위치 (File.separator는 파일구분자로 저장위치를 적을때 'cmm/service'라면 '/' 역할을 해주는것  storePathString는 저장위치, 			
+		file.transferTo(new File(filePath));										// transferTo는 파일데이터를 지정한 file로 저장해준다 
 	    }
+	    //
 	    fvo = new FileVO();
-	    fvo.setFileExtsn(fileExt);
-	    fvo.setFileStreCours(storePathString);
-	    fvo.setFileMg(Long.toString(_size));
-	    fvo.setOrignlFileNm(orginFileName);
-	    fvo.setStreFileNm(newName);
-	    fvo.setAtchFileId(atchFileIdString);
-	    fvo.setFileSn(String.valueOf(fileKey));
+	    fvo.setFileExtsn(fileExt);													// 파일 확장자
+	    fvo.setFileStreCours(storePathString);										// 파일저장경로
+	    fvo.setFileMg(Long.toString(_size));										// 파일 크기
+	    fvo.setOrignlFileNm(orginFileName);											// 파일의 원래이름
+	    fvo.setStreFileNm(newName);													// 저장파일명
+	    fvo.setAtchFileId(atchFileIdString);										// 첨부파일 아이디
+	    fvo.setFileSn(String.valueOf(fileKey));										// 파일연번?
 
 	    //writeFile(file, newName, storePathString);
-	    result.add(fvo);
+	    result.add(fvo);															// list에 담는다
 
 	    fileKey++;
 	}
@@ -152,23 +155,25 @@ public class EgovFileMngUtil {
 	InputStream stream = null;
 	OutputStream bos = null;
 	String stordFilePathReal = (stordFilePath==null?"":stordFilePath).replaceAll("..","");
+	
 	try {
-	    stream = file.getInputStream();
-	    File cFile = new File(stordFilePathReal);
-
-	    if (!cFile.isDirectory()) {
-		boolean _flag = cFile.mkdir();
-		if (!_flag) {
-		    throw new IOException("Directory creation Failed ");
-		}
+	    stream = file.getInputStream();												// 파일 정보를 읽어 담는다.
+	    File cFile = new File(stordFilePathReal);									// 저장위치에 파일을 만든다?								
+	    
+	    /* 저장전 파일의 저장위치에 디렉토리 유무 여부를 확인하고 없다면 만들어준다.*/
+	    if (!cFile.isDirectory()) {													// 폴더가 없다면? 폴더가 아니라면?
+		boolean _flag = cFile.mkdir();												// 디렉토리를 생성
+			if (!_flag) {																// 디렉토리 생성 실패시 예외 전달
+			    throw new IOException("Directory creation Failed ");
+			}
 	    }
-
-	    bos = new FileOutputStream(stordFilePathReal + File.separator + newName);
+	    
+	    bos = new FileOutputStream(stordFilePathReal + File.separator + newName);	// 데이터를 파일에 바이트스트림으로 저장하기 위해 사용. FileOutputStream	(저장위치 / 새이름)
 
 	    int bytesRead = 0;
 	    byte[] buffer = new byte[BUFF_SIZE];
 
-	    while ((bytesRead = stream.read(buffer, 0, BUFF_SIZE)) != -1) {
+	    while ((bytesRead = stream.read(buffer, 0, BUFF_SIZE)) != -1) {				// 읽어와서 저장
 		bos.write(buffer, 0, bytesRead);
 	    }
 	} catch (FileNotFoundException fnfe) {
@@ -178,14 +183,14 @@ public class EgovFileMngUtil {
 	} catch (Exception e) {
 		LOGGER.debug("e: {}", e);
 	} finally {
-	    if (bos != null) {
+	    if (bos != null) {															// FileOutputStream이 사용됐다면  닫아준다
 		try {
 		    bos.close();
 		} catch (Exception ignore) {
 			LOGGER.debug("IGNORED: {}", ignore.getMessage());
 		}
 	    }
-	    if (stream != null) {
+	    if (stream != null) {														// InputStream이 사용됐다면  닫아준다
 		try {
 		    stream.close();
 		} catch (Exception ignore) {
@@ -313,18 +318,18 @@ public class EgovFileMngUtil {
 	newName = EgovStringUtil.isNullToString(newName).replaceAll("..", "");
 	stordFilePath = EgovStringUtil.isNullToString(stordFilePath).replaceAll("..", "");
 	try {
-	    stream = file.getInputStream();
-	    File cFile = new File(stordFilePath);
+	    stream = file.getInputStream();													// 파일 정보를 읽어와서 담는다
+	    File cFile = new File(stordFilePath);											// 저장경로로 파일을 만든다
 
-	    if (!cFile.isDirectory())
-		cFile.mkdir();
+	    if (!cFile.isDirectory())														// 디렉터리가 없다면
+		cFile.mkdir();																	// 디텍터리를 만들어준다
 
-	    bos = new FileOutputStream(stordFilePath + File.separator + newName);
+	    bos = new FileOutputStream(stordFilePath + File.separator + newName);			// 데이터를 파일에 바이트스트림으로 저장하기 위해 사용 - FileOutputStream	(저장위치 / 새이름)
 
 	    int bytesRead = 0;
 	    byte[] buffer = new byte[BUFF_SIZE];
 
-	    while ((bytesRead = stream.read(buffer, 0, BUFF_SIZE)) != -1) {
+	    while ((bytesRead = stream.read(buffer, 0, BUFF_SIZE)) != -1) {					// 데이터를 읽어와서 저장
 		bos.write(buffer, 0, bytesRead);
 	    }
 	} catch (FileNotFoundException fnfe) {

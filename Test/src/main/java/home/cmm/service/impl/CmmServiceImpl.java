@@ -7,6 +7,7 @@ import egovframework.rte.fdl.cmmn.EgovAbstractServiceImpl;
 import home.cmm.service.CmmService;
 import home.cmm.service.SidoVO;
 import home.cmm.service.SigunguVO;
+import home.join.service.JoinVO;
 
 @Service("cmmService")
 public class CmmServiceImpl extends EgovAbstractServiceImpl implements CmmService {
@@ -28,10 +29,6 @@ public class CmmServiceImpl extends EgovAbstractServiceImpl implements CmmServic
 
 	@Override
 	public List<SigunguVO> getSigungu(String sidoCd) throws Exception {
-		// TODO Auto-generated method stub
 		return  cmmDAO.getSigunguList(sidoCd);
 	}
-
-
-
 }

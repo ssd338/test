@@ -24,19 +24,13 @@
 </style>
 <script type="text/javascript" src="<c:url value='/js/EgovBBSMng.js' />" ></script>
 <c:choose>
-<c:when test="${preview == 'true'}">
+<c:when test="${user.uniqId == 'anonymous'}">
 <script type="text/javascript">
 
 	function press(event) {
 	}
-
-	function fn_egov_addNotice() {
-	}
-
-	function fn_select_noticeList(pageNo) {
-	}
-
-	function fn_egov_inqire_notice(nttId, bbsId) {
+	
+	function Regist_Notice(){
 	}
 
 </script>
@@ -46,13 +40,8 @@
 
 	function press(event) {
 		if (event.keyCode==13) {
-			fn_egov_select_noticeList('1');
+			select_noticeList('1');
 		}
-	}
-
-	function fn_egov_addNotice() {
-		document.frm.action = "<c:url value='/cop/bbs${prefix}/addBoardArticle.do'/>";
-		document.frm.submit();
 	}
 
 	function select_noticeList(pageNo) {
@@ -62,12 +51,6 @@
 	   	listForm.submit();
 	}
 
-	function fn_egov_inqire_notice(nttId, bbsId) {
-		//document.subForm.nttId.value = nttId;
-		//document.subForm.bbsId.value = bbsId;
-		//document.subForm.action = "<c:url value='/cop/bbs${prefix}/selectBoardArticle.do'/>";
-		//document.subForm.submit();
-	}
 	function fn_deatil(bbs_no){
 		var listForm = document.forms["frm"];
 		listForm.bbs_no.value = bbs_no;
@@ -75,6 +58,12 @@
 	   	listForm.submit();
 	}
 
+	function Regist_Notice(){
+		var listForm = document.forms["frm"];
+		listForm.action = "/insertNotice.do";
+	   	listForm.submit();
+	}
+	
 </script>
 </c:otherwise>
 </c:choose>
@@ -245,10 +234,13 @@
             </div>
             <!-- search result end -->
 
-			<div id="paging_div"><ul class="paging_align">
+			<div id="paging_div">
+			<ul class="paging_align">
 				<ui:pagination paginationInfo="${paginationInfo}" type="text" jsFunction="select_noticeList" />
 				</ul>
+				<c:if test="${user.uniqId != 'anonymous'}"><input type="submit" value="등록" onclick="Regist_Notice(); return false;" /></c:if>
 			</div>
+
 
             </div><!-- contents end -->
         </div>

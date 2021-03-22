@@ -38,5 +38,13 @@ public class NoticeDAO extends EgovComAbstractDAO{
 	public List<NoticeVO> ntBfList(NoticeVO noticeVO) {
 		return (List<NoticeVO>)list("noticeDAO.ntBfList", noticeVO);
 	}
+
+	public void insertNotice(NoticeVO noticeVO) {
+		insert("noticeDAO.insertNotice", noticeVO);
+	}
+
+	public Integer nextNoticeNo(NoticeVO noticeVO) {
+		return (Integer)select("noticeDAO.nextNoticeNo", noticeVO);
+	}
 	
 }

@@ -30,20 +30,23 @@ public class NoticeVO {
 	private Date udt_dt;
 	private String gubun1;
 	private String gubun2;
-	private String content1;
-	private String content2;
+	private String content1;		// 담당자
+	private String content2;		// 채용내용
 	private String content3;
-	private String item01;			// searchType1
-	private String item02;			// searchType2
-	private String item03;			// searchType3
+	private String item01;			// 근무형태 searchType1
+	private String item02;			// 직종 searchType2
+	private String item03;			// 지역 searchType3	
 	private String item04;			// 인원
-	private String item05;			// 글
+	private String item05;			// 글	자격요건
 	private String item06;			// 필요서류
-	private String item07;			// 지원기간
+	private String item07;			// 지원기간 searchType4
 	private String item08;			// 지원방식
 	private String item09;			// 근무기간
 	private String item10;			// 급여
-	private String item11;
+	private String item11;			
+	
+	private String atch_file_id;     // 첨부파일 id
+	private String file_1;     // 첨부파일 id
 	
 	private int recordCountPerPage = 10;
 	private int pageIndex = 1;				// 현재 페이지 인덱스
@@ -66,6 +69,18 @@ public class NoticeVO {
 	
 	
 	
+	public String getFile_1() {
+		return file_1;
+	}
+	public void setFile_1(String file_1) {
+		this.file_1 = file_1;
+	}
+	public String getAtch_file_id() {
+		return atch_file_id;
+	}
+	public void setAtch_file_id(String atch_file_id) {
+		this.atch_file_id = atch_file_id;
+	}
 	public String getSearchType1() {
 		return searchType1;
 	}

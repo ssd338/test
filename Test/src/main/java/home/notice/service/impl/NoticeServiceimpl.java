@@ -51,5 +51,20 @@ public class NoticeServiceimpl extends EgovAbstractServiceImpl implements Notice
 	public Object ntBfList(NoticeVO noticeVO) throws Exception {
 		return (List<NoticeVO>)noticeDAO.ntBfList(noticeVO);
 	}
+	
+	/* 글 등록 */
+	@Override
+	public String insertNotice(NoticeVO noticeVO) throws Exception {
+		String bbs_no =  String.valueOf(nextNoticeNo(noticeVO));
+		noticeDAO.insertNotice(noticeVO);						
+		return bbs_no;
+	}
 
+	/* 게시판의 다음 게시글번호 */
+	@Override
+	public int nextNoticeNo(NoticeVO noticeVO) throws Exception {
+		return (Integer)noticeDAO.nextNoticeNo(noticeVO);
+	}
+
+	
 }

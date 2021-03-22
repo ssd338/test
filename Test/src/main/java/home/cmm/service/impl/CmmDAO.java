@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 import egovframework.rte.psl.dataaccess.EgovAbstractDAO;
 import home.cmm.service.SidoVO;
 import home.cmm.service.SigunguVO;
+import home.join.service.JoinVO;
 
 @Repository("cmmDAO")
 public class CmmDAO extends EgovAbstractDAO{
@@ -21,7 +22,5 @@ public class CmmDAO extends EgovAbstractDAO{
 
 	public List<SigunguVO> getSigunguList(String sidoCd) {
 		return (List<SigunguVO>) list("cmmDAO.getSigunguList",sidoCd);
-	}
-	
-	
+	}	
 }

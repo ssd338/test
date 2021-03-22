@@ -25,5 +25,10 @@ public interface NoticeService {
 	public void updateReadCnt(NoticeVO noticeVO) throws Exception;
 
 	public Object ntBfList(NoticeVO noticeVO) throws Exception;
+
+	public String insertNotice(NoticeVO noticeVO) throws Exception;
+	
+	public int nextNoticeNo(NoticeVO noticeVO) throws Exception;
+
 	
 }

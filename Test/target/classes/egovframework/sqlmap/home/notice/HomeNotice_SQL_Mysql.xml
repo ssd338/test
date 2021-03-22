@@ -64,16 +64,19 @@
 		<isNotEmpty prepend="AND" property="searchType3">
 			item03 LIKE CONCAT ('%', #searchType3#,'%')
 		</isNotEmpty>
+		
 		<isNotEmpty>
 		<isEqual prepend="AND" property="searchCnd" compareValue="0">
 			title LIKE CONCAT ('%', #searchWrd#,'%') 
 		</isEqual>
-		</isNotEmpty>
+		</isNotEmpty>	
+		
 		<isNotEmpty>
 		<isEqual prepend="AND" property="searchCnd" compareValue="1">
 			contents LIKE CONCAT ('%', #searchWrd#,'%') 	
 		</isEqual>	
 		</isNotEmpty>
+		
 		<isNotEmpty>
 		<isEqual prepend="AND" property="searchCnd" compareValue="2">
 			enc_usr_nm LIKE CONCAT ('%', #searchWrd#,'%') 	
@@ -142,6 +145,13 @@
 		<include refid="noticeDAO.searchField" />
 	</select>
 	
+	<select id="noticeDAO.nextNoticeNo" parameterClass="noticeVO" resultClass="int">
+		SELECT IFNULL(MAX(bbs_no),0)+1
+		FROM tbl_bbsd
+		WHERE bbs_section_cd = #bbs_section_cd#
+	</select>
+	
+	
 	<select id="noticeDAO.selectBbsTitle" parameterClass="noticeVO" resultMap="tbl_bbsm">
 		SELECT bbs_section_cd
 		, bbs_title
@@ -152,13 +162,176 @@
 		WHERE bbs_section_cd = #bbs_section_cd#
 	</select>
 	<select id="noticeDAO.ntBfList" parameterClass="noticeVO" resultMap="notice">
-	 (
-	  SELECT 
-	  	bbs_section_cd
-	  	, bbs_no
-	 	, title
-	  FROM tbl_bbsd
-	  WHERE bbs_no  <![CDATA[ > ]]> #bbs_no#
+		 SELECT L.*
+		 FROM
+		 (
+		  SELECT 
+		  	N.bbs_section_cd
+			, N.bbs_no
+			, N.bbs_option_cd
+			, N.depth_no
+			, N.usr_no
+			, N.enc_usr_nm 
+			, N.enc_email
+			, N.department
+			, N.phone_no1
+			, N.phone_no2
+			, N.title
+			, N.contents
+			, N.bbs_pw
+			, N.pub_yn
+			, N.del_yn
+			, N.notice_yn
+			, N.hit_cnt
+			, N.crt_usr_no
+			, N.crt_dt
+			, N.udt_usr_no 
+			, N.udt_dt
+			, N.gubun1
+			, N.gubun2
+			, N.content1
+			, N.content2
+			, N.content3
+			, N.item01
+			, N.item02
+			, N.item03
+			, N.item04
+			, N.item05
+			, N.item06
+			, N.item07
+			, N.item08
+			, N.item09
+			, N.item10
+			, N.item11 
+		  FROM (
+		  	SELECT 
+		  			bbs_section_cd
+			, bbs_no
+			, bbs_option_cd
+			, depth_no
+			, usr_no
+			, enc_usr_nm 
+			, enc_email
+			, department
+			, phone_no1
+			, phone_no2
+			, title
+			, contents
+			, bbs_pw
+			, pub_yn
+			, del_yn
+			, notice_yn
+			, hit_cnt
+			, crt_usr_no
+			, crt_dt
+			, udt_usr_no 
+			, udt_dt
+			, gubun1
+			, gubun2
+			, content1
+			, content2
+			, content3
+			, item01
+			, item02
+			, item03
+			, item04
+			, item05
+			, item06
+			, item07
+			, item08
+			, item09
+			, item10
+			, item11 
+			FROM	tbl_bbsd
+			WHERE  bbs_no  <![CDATA[ > ]]> #bbs_no#
+				  <include refid="noticeDAO.searchField" />
+			ORDER BY bbs_no
+				  limit 1
+	   	 ) N
+	   UNION ALL
+		  SELECT 
+		  	P.bbs_section_cd
+			, P.bbs_no
+			, P.bbs_option_cd
+			, P.depth_no
+			, P.usr_no
+			, P.enc_usr_nm 
+			, P.enc_email
+			, P.department
+			, P.phone_no1
+			, P.phone_no2
+			, P.title
+			, P.contents
+			, P.bbs_pw
+			, P.pub_yn
+			, P.del_yn
+			, P.notice_yn
+			, P.hit_cnt
+			, P.crt_usr_no
+			, P.crt_dt
+			, P.udt_usr_no 
+			, P.udt_dt
+			, P.gubun1
+			, P.gubun2
+			, P.content1
+			, P.content2
+			, P.content3
+			, P.item01
+			, P.item02
+			, P.item03
+			, P.item04
+			, P.item05
+			, P.item06
+			, P.item07
+			, P.item08
+			, P.item09
+			, P.item10
+			, P.item11 
+		  FROM (
+		  	SELECT 
+		  	bbs_section_cd
+			, bbs_no
+			, bbs_option_cd
+			, depth_no
+			, usr_no
+			, enc_usr_nm 
+			, enc_email
+			, department
+			, phone_no1
+			, phone_no2
+			, title
+			, contents
+			, bbs_pw
+			, pub_yn
+			, del_yn
+			, notice_yn
+			, hit_cnt
+			, crt_usr_no
+			, crt_dt
+			, udt_usr_no 
+			, udt_dt
+			, gubun1
+			, gubun2
+			, content1
+			, content2
+			, content3
+			, item01
+			, item02
+			, item03
+			, item04
+			, item05
+			, item06
+			, item07
+			, item08
+			, item09
+			, item10
+			, item11 
+			FROM	tbl_bbsd
+			WHERE bbs_no  <![CDATA[ < ]]> #bbs_no#
+				  <include refid="noticeDAO.searchField" />
+				  ORDER BY bbs_no
+				  limit 1
+	   	 ) P
 	 ) L
 	  
 	</select>
@@ -203,9 +376,164 @@
 			, item10
 			, item11 
 			FROM tbl_bbsd
-			WHERE 1=1
-			AND bbs_no = #bbs_no#
+			WHERE bbs_no = #bbs_no#
 	</select>
+	<insert id="noticeDAO.insertNotice" parameterClass="noticeVO">
+		INSERT INTO tbl_bbsd (
+			bbs_section_cd
+			, bbs_no
+			<isNotEmpty property="bbs_option_cd">
+			, bbs_option_cd
+			</isNotEmpty>
+			, depth_no
+			, usr_no
+			, enc_usr_nm 
+			, enc_email
+			<isNotEmpty property="department">
+			, department
+			</isNotEmpty>
+			, phone_no1
+			, phone_no2
+			, title
+			, contents
+			<isNotEmpty property="bbs_pw">
+			, bbs_pw
+			</isNotEmpty>
+			, pub_yn
+			, del_yn
+			, notice_yn
+			, hit_cnt
+			, crt_usr_no
+			, crt_dt
+			, udt_usr_no 
+			, udt_dt
+			<isNotEmpty property="gubun1">
+			, gubun1
+			</isNotEmpty>
+			<isNotEmpty property="gubun2">
+			, gubun2
+			</isNotEmpty>
+			<isNotEmpty property="content1">
+			, content1
+			</isNotEmpty>
+			<isNotEmpty property="content2">
+			, content2
+			</isNotEmpty>
+			<isNotEmpty property="content3">
+			, content3
+			</isNotEmpty>
+			<isNotEmpty property="item01">
+			, item01
+			</isNotEmpty>
+			<isNotEmpty property="item02">
+			, item02
+			</isNotEmpty>
+			<isNotEmpty property="item03">
+			, item03
+			</isNotEmpty>
+			<isNotEmpty property="item04">
+			, item04
+			</isNotEmpty>
+			<isNotEmpty property="item05">
+			, item05
+			</isNotEmpty>
+			<isNotEmpty property="item06">
+			, item06
+			</isNotEmpty>
+			<isNotEmpty property="item07">
+			, item07
+			</isNotEmpty>
+			<isNotEmpty property="item08">
+			, item08
+			</isNotEmpty>
+			<isNotEmpty property="item09">
+			, item09
+			</isNotEmpty>
+			<isNotEmpty property="item10">
+			, item10
+			</isNotEmpty>
+			<isNotEmpty property="item11">
+			, item11 
+			</isNotEmpty>
+		) VALUES(
+			#bbs_section_cd#
+			, #bbs_no#
+			<isNotEmpty property="bbs_option_cd">
+			, #bbs_option_cd#
+			</isNotEmpty>
+			, 1
+			, 1
+			, #enc_usr_nm# 
+			, #enc_email#
+			<isNotEmpty property="department">
+			, #department#
+			</isNotEmpty>
+			, #phone_no1#
+			, #phone_no2#
+			, #title#
+			, #contents#
+			<isNotEmpty property="bbs_pw">
+			, #bbs_pw#
+			</isNotEmpty>
+			, 'Y'
+			, 'N'
+			, 'Y'
+			, 0
+			, #usr_no#
+			, NOW()
+			, #usr_no# 
+			, NOW()
+			<isNotEmpty property="gubun1">
+			, #gubun1#
+			</isNotEmpty>
+			<isNotEmpty property="gubun2">
+			, #gubun2#
+			</isNotEmpty>
+			<isNotEmpty property="content1">
+			, #content1#
+			</isNotEmpty>
+			<isNotEmpty property="content2">
+			, #content2#
+			</isNotEmpty>
+			<isNotEmpty property="content3">
+			, #content3#
+			</isNotEmpty>
+			<isNotEmpty property="item01">
+			, #item01#
+			</isNotEmpty>
+			<isNotEmpty property="item02">
+			, #item02#
+			</isNotEmpty>
+			<isNotEmpty property="item03">
+			, #item03#
+			</isNotEmpty>
+			<isNotEmpty property="item04">
+			, #item04#
+			</isNotEmpty>
+			<isNotEmpty property="item05">
+			, #item05#
+			</isNotEmpty>
+			<isNotEmpty property="item06">
+			, #item06#
+			</isNotEmpty>
+			<isNotEmpty property="item07">
+			, #item07#
+			</isNotEmpty>
+			<isNotEmpty property="item08">
+			, #item08#
+			</isNotEmpty>
+			<isNotEmpty property="item09">
+			, #item09#
+			</isNotEmpty>
+			<isNotEmpty property="item10">
+			, #item10#
+			</isNotEmpty>
+			<isNotEmpty property="item11">
+			, #item11# 
+			</isNotEmpty>
+		)
+	</insert>
+	
 	<update id="noticeDAO.updateReadCnt" parameterClass="noticeVO">
 		UPDATE tbl_bbsd SET
 				  hit_cnt = IFNULL(hit_cnt,0)+1
