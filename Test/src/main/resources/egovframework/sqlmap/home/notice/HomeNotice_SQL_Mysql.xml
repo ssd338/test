@@ -43,6 +43,7 @@
 		<result property="item09" column="item09"/>
 		<result property="item10" column="item10"/>
 		<result property="item11" column="item11"/>
+		<result property="atch_file_id" column="atch_file_id"/>
 	</resultMap>
 	<resultMap id="tbl_bbsm" class="home.notice.service.NoticeVO">
 		<result property="bbs_section_cd" column="bbs_section_cd"/>
@@ -52,6 +53,12 @@
 		<result property="use_upload_yn" column="use_upload_yn"/>
 	</resultMap>
 	<sql id="noticeDAO.searchField">
+		<isNotEmpty prepend="AND" property="pub_yn">
+			pub_yn = #pub_yn#
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="del_yn">
+			del_yn = #del_yn#
+		</isNotEmpty>
 		<isNotEmpty prepend="AND" property="bbs_section_cd">
 			bbs_section_cd = #bbs_section_cd#
 		</isNotEmpty>
@@ -89,7 +96,6 @@
 		FROM tbl_bbsm
 	</select>
 	<select id="noticeDAO.selectNoticeList" parameterClass="noticeVO" resultMap="notice">
-		<![CDATA[
 			SELECT 
 			bbs_section_cd
 			, bbs_no
@@ -127,10 +133,10 @@
 			, item08
 			, item09
 			, item10
-			, item11 
+			, item11
+			, atch_file_id 
 			FROM tbl_bbsd
 			WHERE 1=1
-			]]>
 			<include refid="noticeDAO.searchField" />
 		<![CDATA[
  			ORDER BY bbs_no ASC
@@ -203,6 +209,7 @@
 			, N.item09
 			, N.item10
 			, N.item11 
+			, N.atch_file_id 
 		  FROM (
 		  	SELECT 
 		  			bbs_section_cd
@@ -242,6 +249,7 @@
 			, item09
 			, item10
 			, item11 
+			, atch_file_id 
 			FROM	tbl_bbsd
 			WHERE  bbs_no  <![CDATA[ > ]]> #bbs_no#
 				  <include refid="noticeDAO.searchField" />
@@ -287,6 +295,7 @@
 			, P.item09
 			, P.item10
 			, P.item11 
+			, P.atch_file_id 
 		  FROM (
 		  	SELECT 
 		  	bbs_section_cd
@@ -325,7 +334,9 @@
 			, item08
 			, item09
 			, item10
-			, item11 
+			, item11
+			, atch_file_id 
+
 			FROM	tbl_bbsd
 			WHERE bbs_no  <![CDATA[ < ]]> #bbs_no#
 				  <include refid="noticeDAO.searchField" />
@@ -374,17 +385,16 @@
 			, item08
 			, item09
 			, item10
-			, item11 
+			, item11		
+			, atch_file_id 
 			FROM tbl_bbsd
 			WHERE bbs_no = #bbs_no#
 	</select>
 	<insert id="noticeDAO.insertNotice" parameterClass="noticeVO">
-		INSERT INTO tbl_bbsd (
+		INSERT INTO tbl_bbsd
+		(
 			bbs_section_cd
 			, bbs_no
-			<isNotEmpty property="bbs_option_cd">
-			, bbs_option_cd
-			</isNotEmpty>
 			, depth_no
 			, usr_no
 			, enc_usr_nm 
@@ -395,7 +405,9 @@
 			, phone_no1
 			, phone_no2
 			, title
+			<isNotEmpty property="contents">
 			, contents
+			</isNotEmpty>
 			<isNotEmpty property="bbs_pw">
 			, bbs_pw
 			</isNotEmpty>
@@ -455,14 +467,15 @@
 			<isNotEmpty property="item11">
 			, item11 
 			</isNotEmpty>
-		) VALUES(
+			<isNotEmpty property="atch_file_id">
+			, atch_file_id 
+			</isNotEmpty>
+			)
+		VALUES(
 			#bbs_section_cd#
 			, #bbs_no#
-			<isNotEmpty property="bbs_option_cd">
-			, #bbs_option_cd#
-			</isNotEmpty>
-			, 1
-			, 1
+			, '1'
+			, #usr_no#
 			, #enc_usr_nm# 
 			, #enc_email#
 			<isNotEmpty property="department">
@@ -471,13 +484,15 @@
 			, #phone_no1#
 			, #phone_no2#
 			, #title#
+			<isNotEmpty property="contents">
 			, #contents#
+			</isNotEmpty>
 			<isNotEmpty property="bbs_pw">
 			, #bbs_pw#
 			</isNotEmpty>
 			, 'Y'
 			, 'N'
-			, 'Y'
+			, 'N'
 			, 0
 			, #usr_no#
 			, NOW()
@@ -531,6 +546,9 @@
 			<isNotEmpty property="item11">
 			, #item11# 
 			</isNotEmpty>
+			<isNotEmpty property="atch_file_id">
+			, #atch_file_id# 
+			</isNotEmpty>
 		)
 	</insert>
 	
@@ -539,5 +557,51 @@
 				  hit_cnt = IFNULL(hit_cnt,0)+1
 		   WHERE bbs_no = #bbs_no#
 	</update>
-	
+	<update id="noticeDAO.updateNotice" parameterClass="noticeVO">
+		UPDATE tbl_bbsd
+		SET 
+			bbs_section_cd = #bbs_section_cd#
+			, depth_no = #depth_no#
+			, usr_no = #usr_no#
+			, enc_usr_nm  = #enc_usr_nm#
+			, enc_email = #enc_email#
+			, department = #department#
+			, phone_no1 = #phone_no1#
+			, phone_no2 = #phone_no2#
+			, title = #title#
+			, contents = #contents#
+			, bbs_pw = #bbs_pw#
+			, pub_yn = 'Y'
+			, del_yn = 'N'
+			, notice_yn = 'N'
+			, hit_cnt = #hit_cnt#
+			, crt_usr_no = #crt_usr_no#
+			, crt_dt = #crt_dt#
+			, udt_usr_no  = #usr_no#
+			, udt_dt = NOW()
+			, gubun1 = #gubun1#
+			, gubun2 = #gubun2#
+			, content1 = #content1#
+			, content2 = #content2#
+			, content3 = #content3#
+			, item01 = #item01#
+			, item02 = #item02#
+			, item03 = #item03#
+			, item04 = #item04#
+			, item05 = #item05#
+			, item06 = #item06#
+			, item07 = #item07#
+			, item08 = #item08#
+			, item09 = #item09#
+			, item10 = #item10#
+			, item11 = #item11#
+			, atch_file_id = #atch_file_id#
+		WHERE bbs_no = #bbs_no#
+	</update>
+	<update id="noticeDAO.deleteNotice" parameterClass="noticeVO">
+		UPDATE tbl_bbsd
+		SET  pub_yn = 'N'
+			, del_yn = 'Y'
+		WHERE bbs_no = #bbs_no#
+	</update>
 </sqlMap>

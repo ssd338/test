@@ -23,4 +23,8 @@ public class CmmDAO extends EgovAbstractDAO{
 	public List<SigunguVO> getSigunguList(String sidoCd) {
 		return (List<SigunguVO>) list("cmmDAO.getSigunguList",sidoCd);
 	}	
+	
+	public String selectSido(String sidoCd) {
+		return (String) select("cmmDAO.selectSido",sidoCd);
+	}
 }

@@ -15,5 +15,7 @@ public interface CmmService {
 	
 	/* 시군에 해당하는 시군구 조회 */
 	public List<SigunguVO> getSigungu(String sidoCd) throws Exception;
-
+	
+	/* 시군 코드를 주면 시군명을 줌 */
+	public String selectSido(String sidoCd) throws Exception;
 }

@@ -34,7 +34,10 @@
 			, SIGUNGU_NM
 		FROM COM_SIGUNGU
 		WHERE SIDO_CD = #sidoCd#
-
 	</select>
-	
+	<select id="cmmDAO.selectSido" parameterClass="string" resultClass="string">
+		SELECT SIDO_NM
+		FROM COM_SIDO
+		WHERE SIDO_CD = #sidoCd#
+	</select>	
 </sqlMap>

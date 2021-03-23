@@ -171,7 +171,7 @@
 
                 <colgroup>
                     <col width="5%" >
-                    <col width="5%" >
+                    <col width="10%" >
                     <col >
                     <c:if test="${anonymous != 'true'}">
                       <col width="10%" >
@@ -202,7 +202,7 @@
                  <c:forEach var="result" items="${resultList}" varStatus="status">      
 			     <tr onclick="fn_deatil('${result.bbs_no}')">
 			        <td ><c:out value="${paginationInfo.totalRecordCount+1 - ((searchVO.pageIndex-1) * searchVO.pageSize + status.count)}"/></td>
-			        <td><c:out value="${result.item03}" /></td>
+			        <td><c:out value="${result.item11}" /></td>
 			        <td align="left">
 			        <form name="subForm" method="post" action="<c:url value='/cop/bbs${prefix}/selectBoardArticle.do'/>">
 			           

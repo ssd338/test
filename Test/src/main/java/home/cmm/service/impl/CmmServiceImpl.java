@@ -31,4 +31,9 @@ public class CmmServiceImpl extends EgovAbstractServiceImpl implements CmmServic
 	public List<SigunguVO> getSigungu(String sidoCd) throws Exception {
 		return  cmmDAO.getSigunguList(sidoCd);
 	}
+	@Override
+	public String selectSido(String sidoCd) throws Exception {
+		return (String)cmmDAO.selectSido(sidoCd);
+	}
+
 }

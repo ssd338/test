@@ -24,57 +24,51 @@
  td{
  	text-align: left;
  }
+ #btn{
+ 	margin-left:600px;
+ 	width: 100px;
+ 	height: 20px;
+ 	display: inline;
+ }
+ .btns{
+ 	width: 50px;
+ 	height: 20px;
+ 	cursor: pointer;
+ }
+ #middle_content{
+ 	height: 700px;
+ }
+ #content_field{
+ 	height: 600px;
+ }
 </style>
 <script type="text/javascript" src="<c:url value='/js/EgovBBSMng.js' />" ></script>
-<c:choose>
-<c:when test="${preview == 'true'}">
 <script type="text/javascript">
 
-	function press(event) {
-	}
 
-	function fn_egov_addNotice() {
+	function fnUpdate(){
+		var varForm = document.frm
+		varForm.action = "/NoticeUpdateView.do";
+		varForm.submit();
 	}
-
-	function fn_select_noticeList(pageNo) {
+	function fnDelete(){
+		var varForm = document.frm
+		varForm.action = "/noticeDelete.do";
+		varForm.submit();
 	}
-
-	function fn_egov_inqire_notice(nttId, bbsId) {
+	function downloadFile(form, atchFileId, fileSn) {
+	  	var varForm = document.forms[form];
+	  	varForm.action = '/cmm/downloadFile.do?atchFileId='+ atchFileId +'&fileSn='+ fileSn;
+	  	varForm.submit();
+	  }
+	
+	function fnList(){
+		var varForm = document.frm
+		var section_cd = document.getElementById("bbs_section_cd").value
+		varForm.action = "/selectNoticeList.do";
+		varForm.submit();
 	}
-
 </script>
-</c:when>
-<c:otherwise>
-<script type="text/javascript">
-
-	function press(event) {
-		if (event.keyCode==13) {
-			fn_egov_select_noticeList('1');
-		}
-	}
-
-	function fn_egov_addNotice() {
-		document.frm.action = "<c:url value='/cop/bbs${prefix}/addBoardArticle.do'/>";
-		document.frm.submit();
-	}
-
-	function select_noticeList(pageNo) {
-		var listForm = document.forms["frm"];
-		listForm.pageIndex.value = pageNo;
-		listForm.action = "/selectNoticeList.do";
-	   	listForm.submit();
-	}
-
-	function fn_egov_inqire_notice(nttId, bbsId) {
-		//document.subForm.nttId.value = nttId;
-		//document.subForm.bbsId.value = bbsId;
-		//document.subForm.action = "<c:url value='/cop/bbs${prefix}/selectBoardArticle.do'/>";
-		//document.subForm.submit();
-	}
-
-</script>
-</c:otherwise>
-</c:choose>
 <title><c:out value="${notice.bbs_nm}"/> 게시판</title>
 
 <style type="text/css">
@@ -110,7 +104,7 @@
             <div id="content_field"><!--contents start-->
 
 			<form name="frm" action ="<c:url value='/selectNoticeList.do'/>" method="post">
-			<input type="hidden" name="bbs_section_cd" value="<c:out value='${notice.bbs_section_cd}'/>" />			
+			<input type="hidden" id="bbs_section_cd" name="bbs_section_cd" value="<c:out value='${searchVO.bbs_section_cd}'/>" />			
 			<input type="hidden" name="bbs_no"  value="${searchVO.bbs_no }" />
             </form>
             
@@ -120,6 +114,13 @@
 
 
             <div class="search_result_div">
+            	<div id="btn">
+            		<c:if test="${user.uniqId == searchVO.crt_usr_no}">
+            			<input type="button" value=" 수정 " class="btns" onclick="fnUpdate()">
+            			<input type="button" value=" 삭제 " class="btns" onclick="fnDelete()">
+            		</c:if>
+            		<input type="button" value=" 목록 " class="btns" onclick="fnList()">
+           		 </div>
             	<h3>구인 담당자 정보</h3>
                 <table width="98%" cellpadding="0" cellspacing="0" summary="담당자, 전화번호, 팩스,  E-mail">
                 <caption>구인 담당자 정보</caption>
@@ -165,7 +166,7 @@
                 </tr>
                 <tr>
                     <th>근무지역</th>
-                    <td ><input type="hidden" value="${searchVO.item03}"><c:out value="${searchVO.item03}"/></td>
+                    <td ><input type="hidden" value="${searchVO.item03}"><c:out value="${searchVO.item11}"/></td>
 				    <th>모집인원</th>
 				    <td><c:out value="${searchVO.item04} 명" /></td>
                 </tr> 
@@ -185,7 +186,7 @@
                     <th>접수기간</th>
                     <td ><c:out value="${searchVO.item07}"/></td>
 				    <th>지원방법</th>
-				    <td><c:out value="${searchVO.item08} 명" /></td>
+				    <td><c:out value="${searchVO.item08}" /></td>
                 </tr> 
                 <tr>
                     <th>근무기간</th>
@@ -194,38 +195,42 @@
                 <tr>
                     <th>급여</th>
                     <td colspan="3"><c:out value="${searchVO.item10}" /></td>
-                </tr>             
+                </tr>  
+                <tr>
+                    <th>파일</th>
+                    <td colspan="3">
+                    <c:forEach items="${fileDetailVOList}" var="fileList" varStatus="status">
+                    	<a href="here" onclick="downloadFile('frm', '${fileList.atchFileId}', '${fileList.fileSn}'); return false;">
+							${fileList.orignlFileNm} <em>(${fileList.fileSize} bytes)</em>
+						</a>
+                    </c:forEach>
+                    </td>
+                </tr>              
                  </table>
+             
             </div>
             
             <!-- search result end -->	
-
             </div><!-- contents end -->
-            <div style="border: 1px solid;">
-            	<%-- <c:if test="${fn:length(resultPrevNextList) eq 2}">
-            		<c:forEach items="${resultPrevNextList}" var="prevNextList" varStatus="status">
-			        <fmt:formatDate value="${prevNextList.frstRegistPnttm}" type="date" pattern="yyyy-MM-dd" var="prevNextRegistPnttmFormat" />
-					<c:choose>
-						<c:when test="${prevNextList.gubun eq 'PREV'}">
+          <%--   <div style="border: 1px solid;">
+            	 <c:if test="${fn:length(ntBfList) eq 2}">
+            		<c:forEach items="${ntBfList}" var="prevNextList" varStatus="status">
+			        <fmt:formatDate value="${prevNextList.crt_dt}" type="date" pattern="yyyy-MM-dd" var="prevNextRegistPnttmFormat" />	
 							<p><span>이전글</span>
-							<span class="type">[<c:out value='${prevNextList.nttType }' escapeXml="false" />]</span>
-			                <a href="#LINK" onclick="fnDetail('${prevNextList.nttId}'); return false;"><c:out value='${prevNextList.nttSj}' escapeXml="false" /></a>
+			                <a href="#LINK" onclick="fnDetail(); return false;"><c:out value='${prevNextList.title}' escapeXml="false" /></a>
 			                <span class="date">${prevNextRegistPnttmFormat}</span>
 							</p>
-						</c:when>
-						<c:otherwise>
 							<p><span>다음글</span>
-								<span class="type">[<c:out value='${prevNextList.nttType }' escapeXml="false" />]</span>
-								<a href="#LINK" onclick="fnDetail('${prevNextList.nttId}'); return false;"><c:out value='${prevNextList.nttSj}' escapeXml="false" /></a>
+								<a href="#LINK" onclick="fnDetail(); return false;"><c:out value='${prevNextList.title}' escapeXml="false" /></a>
 								<span class="date">${prevNextRegistPnttmFormat}</span>
 							</p>
-						</c:otherwise>
-					</c:choose>
 				</c:forEach> 
-            	</c:if> --%>
-            </div>
+            	</c:if> 
+            </div> --%>
         </div>
+        
     </div>
+    
     <!-- footer 시작 -->
     <div id="footer"><c:import url="/EgovPageLink.do?link=main/inc/EgovIncFooter" /></div>
     <!-- //footer 끝 -->

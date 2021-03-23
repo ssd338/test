@@ -30,5 +30,9 @@ public interface NoticeService {
 	
 	public int nextNoticeNo(NoticeVO noticeVO) throws Exception;
 
+	public int updateNotice(NoticeVO noticeVO) throws Exception;
+
+	public int deleteNotice(NoticeVO noticeVO) throws Exception;
+
 	
 }

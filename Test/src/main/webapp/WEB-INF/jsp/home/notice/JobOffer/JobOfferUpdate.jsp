@@ -43,6 +43,16 @@
  	margin: 0px;
  	padding: 0px;
  }
+ #btn{
+ 	margin-left:600px;
+ 	width: 100px;
+ 	height: 20px;
+ }
+ .btns{
+ 	width: 50px;
+ 	height: 20px;
+ 	cursor: pointer;
+ }
 </style>
 <script type="text/javascript" src="<c:url value='/js/EgovMultiFile.js'/>" ></script>
 <script type="text/javascript" src="<c:url value='/js/EgovBBSMng.js' />" ></script>
@@ -58,13 +68,17 @@
 		var sN = sido.options[sido.selectedIndex].text
 		document.getElementById("sidoName").value = sN
 	}
-	function Regist_Notice() {
+	function Update_Notice() {
 		var date = document.getElementById("date1").value +' ~ ' + document.getElementById("date2").value
 		document.getElementById("item07").value = date
-		document.frm.action = "<c:url value='/noticeRegist.do'/>";
+		document.frm.action = "<c:url value='/noticeUpdate.do'/>";
 		document.frm.submit();
 	}
-	
+	function fnDetail(){
+		var varForm = document.move
+		varForm.action = "/selectNoticeDetail.do";
+		varForm.submit();
+	}
 
 </script>
 </c:otherwise>
@@ -105,9 +119,21 @@
 
 			<!-- sub title start -->
             <div><h2><c:out value="${notice.bbs_nm}"/> 게시판</h2></div>
-            <form name="frm" method="post" enctype="multipart/form-data" action="/noticeRegist.do">
-            <input type="hidden" name="bbs_section_cd" value="<c:out value='${notice.bbs_section_cd}'/>" />			
-			<div><h2><label>제목: </label><input type="text" value="" name="title"></h2></div>
+            	<div id="btn">
+            		<c:if test="${user.uniqId == searchVO.crt_usr_no}">
+            			<input type="button" value=" 수정 왼료 " class="btns">
+            		</c:if>
+           		 </div>
+            <form name="frm" method="post" enctype="multipart/form-data" action="/noticeUpdate.do">
+            <input type="hidden" id="section_cd" name="bbs_section_cd" value="<c:out value='${notice.bbs_section_cd}'/>" />	
+            <input type="hidden" name="bbs_no"  value="${searchVO.bbs_no }" id="bbs_no"/>
+            <input type="hidden" name="usr_no"  value="${searchVO.usr_no }" />
+            <input type="hidden" name="enc_usr_nm"  value="${searchVO.enc_usr_nm }" />
+            <input type="hidden" name="department"  value="${searchVO.department }" />
+            <input type="hidden" name="crt_usr_no"  value="${searchVO.crt_usr_no }" />
+            <input type="hidden" name="crt_dt"  value="${searchVO.crt_dt }" />
+            <input type="hidden" name="bbs_pw"  value="${searchVO.bbs_pw }" />
+			<div><h2><label>제목: </label><input type="text" value="<c:out value='${searchVO.title}'/>" name="title"></h2></div>
 
             <div class="search_result_div">
             	<h3>구인 담당자 정보</h3>
@@ -122,15 +148,15 @@
                 </colgroup>
                 <tr>
                     <th>담당자</th>
-                    <td ><input class="inputT" type="text" name="content1"/></td>
+                    <td ><input class="inputT" type="text" name="content1" value="<c:out value='${searchVO.enc_usr_nm}'/>"/></td>
                     <th>전화번호</th>		 
-                    <td><input class="inputT" type="text" name="phone_no1"/></td> 
+                    <td><input class="inputT" type="text" name="phone_no1" value="<c:out value='${searchVO.phone_no1}'/>"/></td> 
                 </tr>
                 <tr>
                     <th>팩스</th>
-                    <td ><input class="inputT" type="text" name="phone_no2"/></td>
+                    <td ><input class="inputT" type="text" name="phone_no2" value="<c:out value='${searchVO.phone_no2}'/>"/>/></td>
 				    <th>E-mail</th>
-				    <td><input class="inputT" type="text" name="enc_email"/></td>
+				    <td><input class="inputT" type="text" name="enc_email" value="<c:out value='${searchVO.enc_email}'/>"/>/></td>
                 </tr>          
                  </table>
             </div>
@@ -145,24 +171,28 @@
                     <col width="25%" >
                 </colgroup>
                 <tr>
-                <td colspan="4"><c:out value=""/></td>
+                <td colspan="4"><c:out value="${searchVO.title}"/></td>
                 </tr>
                 <tr>
                     <th>근무형태</th>
                     <td >
                     <select name="item01" class="inputT" title="근무조건 선택">
-						<option value="" <c:if test="${searchVO.searchType1 == ''}">selected="selected"</c:if> >근무형태선택</option>
+						<option value="<c:out value='${searchVO.item01}'/>" selected="selected"><c:out value='${searchVO.item01}'/></option>
 					    <c:forEach items="${workType}" var="wT">
+					    <c:if test="${wT != searchVO.item01 }">
 			            	<option value="${wT}">${wT}</option>
+			            </c:if>
 			            </c:forEach>
 					</select>
                     </td>
                     <th>직종</th>		 
                     <td>
                     <select name="item02" class="inputT" title="검색조건 선택">
-						<option value="" <c:if test="${searchVO.searchType2 == ''}">selected="selected"</c:if> >직종선택</option>
+						<option value="<c:out value='${searchVO.item02}'/>" selected="selected"><c:out value='${searchVO.item02}'/></option>
 						<c:forEach items="${workJobType}" var="wJT">
-			        		<option value="${wJT}" >${wJT}</option>
+			        	<c:if test="${wJT != searchVO.item02 }">
+			            	<option value="${wJT}">${wJT}</option>
+			            </c:if>
 			        	</c:forEach>
 			        </select>
                     </td> 
@@ -170,53 +200,76 @@
                 <tr>
                     <th>근무지역</th>
                     <td >
-                    	<input type="hidden" value="" id="sidoName" name="item11">
+                    	<input type="hidden" value="${searchVO.item11}" id="sidoName" name="item11">
                     	<select name="item03" class="inputT" id="sido" onchange="fn_sidoName()">
-			            <option value="" selected>시도</option>
+			            <option value="${searchVO.item03}" selected="selected"><c:out value='${searchVO.item11}'/></option>
 			            <c:forEach items="${sido_result}" var="sido">
-			            <option value="${sido.sidoCd}" >${sido.sidoNm}</option>
+			            <c:if test="${sido.sidoCd != searchVO.item03 }">
+			            	<option value="${sido.sidoCd}">${sido.sidoNm}</option>
+			            </c:if>
 			            </c:forEach>
 			            </select>
 			        </td>
 				    <th>모집인원</th>
-				    <td><input class="inputT3" type="text" name="item04"/> 명</td>
+				    <td><input class="inputT3" type="text" name="item04" value="<c:out value='${searchVO.item04}' />"/> 명</td>
                 </tr> 
                 <tr>
                     <th>자격요건</th>
-                    <td colspan="3"><input class="inputT2" type="text" name="item05"/></td>
+                    <td colspan="3"><input class="inputT2" type="text" name="item05" value="<c:out value='${searchVO.item05}' />"/></td>
                 </tr>    
                 <tr>
                     <th>채용내용</th>
-                    <td colspan="3"><input class="inputT2" type="text" name="contents"/></td>
+                    <td colspan="3"><input class="inputT2" type="text" name="contents" value="<c:out value='${searchVO.contents}' />"/></td>
                 </tr>  
                  <tr>
                     <th>준비서류</th>
-                    <td colspan="3"><input class="inputT2" type="text" name="item06"/></td>
+                    <td colspan="3"><input class="inputT2" type="text" name="item06" value="<c:out value='${searchVO.item06}' />"/></td>
                 </tr>
                 <tr>
                     <th>접수기간</th>
-                    <td colspan="3"><input type="hidden" value="" name="item07" id="item07"><input id="date1" class="inputT3" type="Date"/> ~ <input id="date2" class="inputT3" type="Date"/></td>
+                    <td colspan="3"><input type="hidden" value="<c:out value='${searchVO.item07}' />" name="item07" id="item07"><input id="date1" class="inputT3" type="Date"/> ~ <input id="date2" class="inputT3" type="Date"/></td>
 				</tr>
 				<tr>
 				    <th>지원방법</th>
-				    <td colspan="3"><input class="inputT2" type="text" name="item08"/></td>
+				    <td colspan="3"><input class="inputT2" type="text" name="item08" value="<c:out value='${searchVO.item08}' />"/></td>
                 </tr> 
                 <tr>
                     <th>근무기간</th>
-                    <td colspan="3"><input class="inputT2" type="text" name="item09"/></td>
+                    <td colspan="3"><input class="inputT2" type="text" name="item09" value="<c:out value='${searchVO.item09}' />"/></td>
                 </tr>
                 <tr>
                     <th>급여</th>
-                    <td colspan="3"><input class="inputT2" type="text" name="item10"/></td>
+                    <td colspan="3"><input class="inputT2" type="text" name="item10" value="<c:out value='${searchVO.item10}' />"/></td>
                 </tr> 
                 <tr>
-                   <th><label for="FileUploader">파일첨부</label></th>
-                   <td class="td_content" colspan="3">
-                   	<input type="hidden" name="atchCtrl" value="<%=FileUtil.ORDER_FLAG_INSERT%>"/>
-					<input type="hidden" name="atchDtlNo"/>
-					<input type="file" name="atchFile"  class="file-input"/>
-                   </td>
-                </tr>              
+                	<c:if test="${ fn:length(fileDetailVOList) > 0 }">
+                     <th rowspan="2"><label for="FileUploader">파일첨부</label></th>
+                     <td class="td_content" colspan="3">
+	                 	<c:forEach items="${fileDetailVOList}" var="fileList" varStatus="status">
+	                    	<a  class="fileD" href="here" onclick="downloadFile('frm', '${fileList.atchFileId}', '${fileList.fileSn}'); return false;">
+								${fileList.orignlFileNm} <em>(${fileList.fileSize} bytes)</em>
+							</a>
+	                    </c:forEach>
+                      </td>
+				</tr>
+				<tr>
+                   	   <td class="td_content" colspan="3">
+	                   		<input type="hidden" name="atchCtrl" value="<%=FileUtil.ORDER_FLAG_UPDATE%>"/>
+							<input type="hidden" name="atchDtlNo" />
+							<input type="file" name="atchFile"  class="file-input"/>
+                  	   </td>
+                </tr>
+                  	 </c:if>
+                  	 <c:if test="${ fn:length(fileDetailVOList) eq 0 }">
+                  	 	<th><label for="FileUploader">파일첨부</label></th>
+                    	<td class="td_content" colspan="3">
+	                   		<input type="hidden" name="atchCtrl" value="<%=FileUtil.ORDER_FLAG_INSERT%>"/>
+							<input type="hidden" name="atchDtlNo"/>
+							<input type="file" name="atchFile"  class="file-input"/>
+                   		</td>
+                   	 </c:if>
+                  </tr>
+            
                  </table>
             </div>
            </form>
@@ -224,7 +277,8 @@
 
             </div><!-- contents end -->
       
-            <input type="submit" value="등록" onclick="Regist_Notice(); return false;" />
+            <input type="submit" value="수정하기" onclick="Update_Notice(); return false;" />
+            <input type="submit" value=" 뒤로 " onclick="fnDetail(); return false;" />
             
         </div>
     </div>
@@ -234,6 +288,9 @@
 </div>
 <!-- //wrap end -->
 
-
+<form name="move" action ="/selectNoticeList.do" method="post">
+<input type="hidden" name="bbs_section_cd" value="<c:out value='${notice.bbs_section_cd}'/>" />	
+<input type="hidden" name="bbs_no"  value="${searchVO.bbs_no }"/>
+</form>
 </body>
 </html>

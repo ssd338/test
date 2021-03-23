@@ -55,8 +55,10 @@ public class NoticeServiceimpl extends EgovAbstractServiceImpl implements Notice
 	/* 글 등록 */
 	@Override
 	public String insertNotice(NoticeVO noticeVO) throws Exception {
-		String bbs_no =  String.valueOf(nextNoticeNo(noticeVO));
-		noticeDAO.insertNotice(noticeVO);						
+	// 게시글번호 생성
+		String bbs_no = String.valueOf(nextNoticeNo(noticeVO));
+		noticeVO.setBbs_no(bbs_no);
+		noticeDAO.insertNotice(noticeVO);
 		return bbs_no;
 	}
 
@@ -66,5 +68,17 @@ public class NoticeServiceimpl extends EgovAbstractServiceImpl implements Notice
 		return (Integer)noticeDAO.nextNoticeNo(noticeVO);
 	}
 
+	@Override
+	public int updateNotice(NoticeVO noticeVO) throws Exception {
+		return (Integer)noticeDAO.updateNotice(noticeVO);
+	}
+
+	@Override
+	public int deleteNotice(NoticeVO noticeVO) throws Exception {
+		return (Integer)noticeDAO.deleteNotice(noticeVO);
+	}
+
+
+	
 	
 }

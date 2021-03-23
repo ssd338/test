@@ -20,8 +20,8 @@ public class NoticeVO {
 	private String title;
 	private String contents;
 	private String bbs_pw;
-	private String pub_yn;
-	private String del_yn;
+	private String pub_yn ="y";
+	private String del_yn = "N";
 	private String notice_yn;
 	private String hit_cnt;
 	private String crt_usr_no;
@@ -43,7 +43,7 @@ public class NoticeVO {
 	private String item08;			// 지원방식
 	private String item09;			// 근무기간
 	private String item10;			// 급여
-	private String item11;			
+	private String item11;			// 지역명
 	
 	private String atch_file_id;     // 첨부파일 id
 	private String file_1;     // 첨부파일 id

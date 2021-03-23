@@ -11,6 +11,10 @@
                 <entry key="posblAtchFileSize" value="5242880"/>
                 <entry key="Globals.fileStorePath" value="C:\user\upload"/>
                 <entry key="Globals.addedOptions" value="false"/>
+                
+                  
+                 <!-- FILE UPLOAD -->
+				<entry key="file.upload.path" value="c:/user/upload/"/> <!-- 포탈 물리경로 -->
             </map>
         </property>
     </bean>

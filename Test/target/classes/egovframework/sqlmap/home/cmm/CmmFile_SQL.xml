@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://www.ibatis.com/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="CmmFile">
+
+	<typeAlias  alias="FileMasterVO" type="cmm.service.FileMasterVO"/>
+	<typeAlias  alias="FileDetailVO" type="cmm.service.FileDetailVO"/>
+	
+	<resultMap id="fileMasterVO" class="cmm.service.FileMasterVO">
+		<result property="atchFileId" column="ATCH_FILE_ID" columnIndex="1"/>
+		<result property="creatDt" column="CREAT_DT" columnIndex="2"/>
+		<result property="useAt" column="USE_AT" columnIndex="3"/>		
+	</resultMap>
+
+
+	<resultMap id="fileDetailVO" class="cmm.service.FileDetailVO">
+		<result property="atchFileId" column="ATCH_FILE_ID" columnIndex="1"/>
+		<result property="fileSn" column="FILE_SN" columnIndex="2"/>
+		<result property="fileStreCours" column="FILE_STRE_COURS" columnIndex="3"/>
+		<result property="streFileNm" column="STRE_FILE_NM" columnIndex="4"/>
+		<result property="orignlFileNm" column="ORIGNL_FILE_NM" columnIndex="5"/>
+		<result property="fileExtsn" column="FILE_EXTSN" columnIndex="6"/>
+		<result property="fileCn" column="FILE_CN" columnIndex="7"/>
+		<result property="fileSize" column="FILE_SIZE" columnIndex="8"/>
+	</resultMap>
+
+
+	<insert id="cmmFileDAO.insertFileMasterXXX" parameterClass="FileMasterVO">
+			INSERT INTO LETTNFILE
+				(ATCH_FILE_ID, CREAT_DT, USE_AT)
+			VALUES
+				( #atchFileId#, NOW(), 'Y')	
+	</insert>
+	
+		<select id="cmmFileDAO.getMaxFileSN" parameterClass="FileDetailVO" resultClass="java.lang.Integer">
+		<![CDATA[
+			SELECT IFNULL(MAX(FILE_SN),0)+1 AS FILE_SN
+			FROM LETTNFILEDETAIL
+			WHERE ATCH_FILE_ID =  #atchFileId#
+		]]>
+	</select>
+	
+	<insert id="cmmFileDAO.insertFileDetailXXX" parameterClass="FileDetailVO">
+		INSERT INTO LETTNFILEDETAIL
+			( ATCH_FILE_ID, FILE_SN, FILE_STRE_COURS, STRE_FILE_NM, 
+			  ORIGNL_FILE_NM, FILE_EXTSN, FILE_SIZE)
+			VALUES
+			( #atchFileId#, #fileSn#, #fileStreCours#, #streFileNm#, 
+			  #orignlFileNm#, #fileExtsn#, #fileSize#)	
+	</insert>
+	
+	<select id="cmmFileDAO.selectFileDetailList" parameterClass="java.lang.String" resultMap="fileDetailVO" >
+		SELECT	
+			ATCH_FILE_ID,
+			FILE_SN,
+			FILE_STRE_COURS,
+			STRE_FILE_NM,
+			ORIGNL_FILE_NM,
+			FILE_EXTSN,
+			FILE_CN,
+			FILE_SIZE
+		FROM LETTNFILEDETAIL
+		WHERE ATCH_FILE_ID = #atchFileId#
+		ORDER BY FILE_SN
+ 	</select>
+
+ 	<select id="cmmFileDAO.selectFileMasterCount" parameterClass="java.lang.String" resultClass="java.math.BigDecimal" >
+		SELECT COUNT(*)
+		FROM LETTNFILE
+		WHERE USE_AT = 'Y'
+		AND ATCH_FILE_ID = #atchFileId#
+ 	</select>
+
+ 	<select id="cmmFileDAO.selectFileDetailCount" parameterClass="java.lang.String" resultClass="java.lang.String" >
+		SELECT COUNT(*)
+		FROM LETTNFILE MST
+		LEFT JOIN LETTNFILEDETAIL DTL
+		ON (MST.ATCH_FILE_ID = DTL.ATCH_FILE_ID
+		)
+		WHERE MST.ATCH_FILE_ID = #atchFileId#
+ 	</select>
+
+
+	<update id="cmmFileDAO.alternateFileDetail" parameterClass="FileDetailVO">
+		UPDATE LETTNFILEDETAIL
+		SET 
+			FILE_SN = #fileSn#,
+			FILE_STRE_COURS = #fileStreCours#,
+			STRE_FILE_NM = #streFileNm#,
+			ORIGNL_FILE_NM = #orignlFileNm#,
+			FILE_EXTSN = #fileExtsn#,
+			FILE_SIZE = #fileSize#,
+			FILE_CN = #fileCn#
+		WHERE ATCH_FILE_ID = #atchFileId#
+		AND FILE_SN = #fileSn#
+	</update>
+
+
+	<delete id="cmmFileDAO.deleteFileDetailXXX" parameterClass="FileDetailVO">
+		DELETE FROM LETTNFILEDETAIL
+		WHERE ATCH_FILE_ID = #atchFileId#
+			AND FILE_SN = #fileSn#
+	</delete>
+
+	<delete id="cmmFileDAO.deleteFileMasterXXX" parameterClass="java.lang.String">
+		DELETE FROM LETTNFILE
+		WHERE ATCH_FILE_ID = #atchFileId#
+	</delete>
+
+ 	<select id="cmmFileDAO.selectFileDetail" parameterClass="FileDetailVO" resultMap="fileDetailVO" >
+		SELECT 
+			ATCH_FILE_ID,
+			FILE_SN,
+			FILE_STRE_COURS,
+			STRE_FILE_NM,
+			ORIGNL_FILE_NM,
+			FILE_EXTSN,
+			FILE_CN,
+			FILE_SIZE
+		FROM LETTNFILEDETAIL
+		WHERE ATCH_FILE_ID = #atchFileId#
+		AND FILE_SN = #fileSn#
+ 	</select>
+ 	
+ 	<select id="cmmFileDAO.selectFileDetailFirst" parameterClass="java.lang.String" resultMap="fileDetailVO" >
+		SELECT 
+				ATCH_FILE_ID,
+				FILE_SN,
+				FILE_STRE_COURS,
+				STRE_FILE_NM,
+				ORIGNL_FILE_NM,
+				FILE_EXTSN,
+				FILE_CN,
+				FILE_SIZE
+		FROM LETTNFILEDETAIL
+		WHERE ATCH_FILE_ID = #atchFileId#
+		ORDER BY FILE_SN
+		LIMIT 1
+ 	</select>
+ 	
+</sqlMap>
+

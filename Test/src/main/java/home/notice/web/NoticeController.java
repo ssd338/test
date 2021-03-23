@@ -16,6 +16,8 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springmodules.validation.commons.DefaultBeanValidator;
 
+import cmm.service.CmmFileService;
+import cmm.service.FileManagementVO;
 import egovframework.com.cmm.LoginVO;
 import egovframework.com.cmm.service.EgovFileMngService;
 import egovframework.com.cmm.service.EgovFileMngUtil;
@@ -38,6 +40,8 @@ public class NoticeController {
 	@Resource(name = "noticeService")
 	private NoticeService noticeService;
 	
+	@Resource(name = "cmmFileService")
+  	private CmmFileService cmmFileService;
 	// 첨부파일 관련
 	@Resource(name="EgovFileMngService")
 	private EgovFileMngService fileMngService;
@@ -96,9 +100,9 @@ public class NoticeController {
 			model.addAttribute("workJobType",Constant.WORK_JOB_TYPE);       // 근무직종
 			model.addAttribute("workTime",Constant.WORK_TIME);    			// 근무직종
 		}
-		String path = notice.getBbs_title();	// 넘어온 게시판 번호에 따라서 주소를 찾아준다.
-		path += "/"+path+"List";
-		return "home/notice/" + path;
+		
+		String path = stringPath(noticeVO, "List");
+		return path;
 	}
 	
 	
@@ -113,6 +117,9 @@ public class NoticeController {
 		LoginVO user = new LoginVO();
 		if (EgovUserDetailsHelper.isAuthenticated()) {
 			user = (LoginVO) EgovUserDetailsHelper.getAuthenticatedUser();
+		}else {
+			user = new LoginVO();
+			user.setUniqId("anonymous");
 		}
 		
 		noticeService.updateReadCnt(noticeVO);
@@ -123,10 +130,10 @@ public class NoticeController {
 		model.addAttribute("searchVO", noticeVO);
 		model.addAttribute("ntBfList", noticeService.ntBfList(noticeVO));
 		model.addAttribute("user", user);
+		model.addAttribute("fileDetailVOList", cmmFileService.selectFileDetailList(noticeVO.getAtch_file_id()));
 		
-		String path = notice.getBbs_title();
-		path += "/"+ path+"Detail";
-		return "home/notice/" + path;
+		String path = stringPath(noticeVO, "Detail");
+		return path;
 	}
 	
 	// 게시물 등록 뷰
@@ -151,57 +158,107 @@ public class NoticeController {
 			model.addAttribute("workTime",Constant.WORK_TIME);    			 // 근무직종
 		}
 		
-		String path = notice.getBbs_title();
-		path += "/"+ path+"Regist";
-		return "home/notice/" + path;
+		String path = stringPath(noticeVO, "Regist");
+		return path;
 	}
-	
+	/* 게시글 등록 */
 	 @RequestMapping("/noticeRegist.do")
 	    public String noticeRegist(
-	    		final MultipartHttpServletRequest multiRequest				// 첨부파일을 위한...
+	    		 HttpServletRequest req				// 첨부파일을 위한...
 	            , @ModelAttribute("searchVO") NoticeVO noticeVO
 	            , BindingResult bindingResult)
-	            throws Exception {
-//
-//	    	beanValidator.validate(noticeVO, bindingResult);
-//
-//			if(bindingResult.hasErrors()){
-//
-//				return "/uss/olh/wor/EgovFaqCnRegist";
-//
-//			}
-		 	NoticeVO notice = noticeService.selectBbsTitle(noticeVO);
-		 	String path = notice.getBbs_title();
-			path += "/" + path + "List";
-
+	            throws Exception {	 	
 	    	// 첨부파일 관련 첨부파일ID 생성
-			List<FileVO> _result = null;
-			String _atchFileId = "";
-			final Map<String, MultipartFile> files = multiRequest.getFileMap();
-			
-			if(!files.isEmpty()){
-			 _result = fileUtil.parseFileInf(files, path, 0, "", "");			// 실제 로컬에 저장되는건 이부분인듯
-			 _atchFileId = fileMngService.insertFileInfs(_result);  			// 디비에 저장, 파일이 생성되고나면 생성된 첨부파일 ID를 리턴한다.
-			}
-			System.out.println("허허");
-
-	    	// 리턴받은 첨부파일ID를 셋팅한다..
-			noticeVO.setAtch_file_id(_atchFileId);			// 첨부파일 ID
+			noticeVO.setAtch_file_id(cmmFileService.uploadFile(req, new FileManagementVO(true)));
 
 	    	// 로그인VO에서  사용자 정보 가져오기
 	    	LoginVO	loginVO = (LoginVO)EgovUserDetailsHelper.getAuthenticatedUser();
+	    	noticeVO.setUsr_no(loginVO.getUniqId());					// 최초등록자ID
+	    	noticeVO.setEnc_usr_nm(loginVO.getName());					// 최초등록자 이름
 
-	    	String	frstRegisterId = loginVO.getUniqId();
-	    	String usrNm = loginVO.getName();
+	    	String bbs_no = noticeService.insertNotice(noticeVO);
+	    	if(bbs_no != null) {
+	    		return "redirect:/selectNoticeDetail.do?bbs_no=" + bbs_no;
+	    
+	    	}else {
+	    		return stringPath(noticeVO, "List");
+	    	}
+	 }
+	 
+	 /* 게시글 수정 */
+	 @RequestMapping("/NoticeUpdateView.do")
+		public String NoticeUpdateView(
+				@ModelAttribute("searchVO") NoticeVO noticeVO
+				, ModelMap model
+				, HttpServletRequest request
+				) throws Exception {
+			if (EgovUserDetailsHelper.isAuthenticated()) {
+				NoticeVO notice = noticeService.selectBbsTitle(noticeVO);	 // 게시판 정보를 가져온다.
+				noticeVO = noticeService.selectDetail(noticeVO);
+				
+				model.addAttribute("notice", notice);
+				model.addAttribute("searchVO", noticeVO);
+				model.addAttribute("sido_result", cmmService.getSido());
+				model.addAttribute("fileDetailVOList", cmmFileService.selectFileDetailList(noticeVO.getAtch_file_id()));
+				if(noticeVO.getBbs_section_cd().equals("1") || noticeVO.getBbs_section_cd().equals("2")) {	//구인,구직 게시판 일 경우
+					model.addAttribute("workType",Constant.WORK_TYPE);				 // 근무타입
+					model.addAttribute("workJobType",Constant.WORK_JOB_TYPE);    	 // 근무직종
+					model.addAttribute("workTime",Constant.WORK_TIME);    			 // 근무직종
+				}
+				String path = stringPath(noticeVO, "Update");
+				return path;
+			}else {
+				return stringPath(noticeVO, "List");
+			}
+		}
+	 
+	 /* 게시글 수정 */
+	 @RequestMapping("/noticeUpdate.do")
+	    public String noticeUpdate(
+	    		 HttpServletRequest req				// 첨부파일을 위한...
+	            , @ModelAttribute("searchVO") NoticeVO noticeVO
+	            , BindingResult bindingResult)
+	            throws Exception {	 	
+	    	// 첨부파일 관련 첨부파일ID 생성
+			noticeVO.setAtch_file_id(cmmFileService.uploadFile(req, new FileManagementVO(true)));
+	    	// 로그인VO에서  사용자 정보 가져오기
+	    	LoginVO	loginVO = (LoginVO)EgovUserDetailsHelper.getAuthenticatedUser();
+	    	noticeVO.setUdt_usr_no(loginVO.getUniqId());					// 최초등록자ID
+	    	int s = -1;
+	    	s = noticeService.updateNotice(noticeVO);
+	    	if(s > 0) {
+	    		return "redirect:/selectNoticeDetail.do?bbs_no=" + noticeVO.getBbs_no();
+	    	}else {
+	    		return stringPath(noticeVO, "List");
+	    	}
+	 }
+	 
+	 /* 삭제 */
+	 @RequestMapping("/noticeDelete.do")
+	    public String noticeDelete(
+	    		 HttpServletRequest req				// 첨부파일을 위한...
+	            , @ModelAttribute("searchVO") NoticeVO noticeVO
+	            , BindingResult bindingResult)
+	            throws Exception {	 	
+			cmmFileService.deleteAllFileDetailAndMaster(noticeVO.getAtch_file_id());	// 첨부파일 삭제 boolean 반환
+	    	noticeService.deleteNotice(noticeVO);
 	    	
-	    	
-	    	noticeVO.setUsr_no(frstRegisterId);					// 최초등록자ID
-	    	noticeVO.setEnc_usr_nm(usrNm);						// 최초등록자 이름
-
-	    	noticeService.insertNotice(noticeVO);
-
-
-	        return "home/notice/" + path;
-	    }
-	
+	    	return forwardPath("selectNoticeList");
+	 }
+	 
+	 
+	 // 경로지정
+	 public String stringPath(NoticeVO noticeVO, String pathType) throws Exception {
+		 NoticeVO notice = noticeService.selectBbsTitle(noticeVO);
+		 String fPath = "home/notice/";
+		 String path = notice.getBbs_title();
+		 fPath += path + "/" + path + pathType;
+		 return fPath;
+	 }
+	 
+	 // 경로지정 forward
+	 public String forwardPath(String path) throws Exception{
+		 String fPath ="forward:/" + path + ".do"; 
+		 return fPath;
+	 }
 }
