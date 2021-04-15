@@ -136,7 +136,7 @@ public class EgovLoginController {
     		model.addAttribute("message", egovMessageSource.getMessage("fail.common.login"));
         	return "uat/uia/EgovLoginUsr";
     	}
-
+    	System.out.println("하하");
 		// 2. 메인 페이지 이동
     	return "forward:/home/main/mainPage.do";
 
